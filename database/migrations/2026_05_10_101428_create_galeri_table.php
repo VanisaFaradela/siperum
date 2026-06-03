@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('galeri', function (Blueprint $table) {
             $table->id('id_galeri');
-            $table->unsignedBigInteger('id_perumahan');
+            $table->unsignedBigInteger('id_cluster');
             $table->string('judul_galeri', 150)->nullable();
             $table->string('foto', 255)->nullable();
             $table->string('kategori_foto', 100)->nullable();
@@ -20,9 +20,9 @@ return new class extends Migration
             $table->date('tanggal_upload')->nullable();
             $table->timestamps();
             
-            $table->foreign('id_perumahan')
-                  ->references('id_perumahan')
-                  ->on('perumahan')
+            $table->foreign('id_cluster')
+                  ->references('id_cluster')
+                  ->on('cluster')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
         });
