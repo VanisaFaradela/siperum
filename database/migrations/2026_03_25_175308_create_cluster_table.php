@@ -8,9 +8,9 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('perumahan', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama_perumahan');
+        Schema::create('cluster', function (Blueprint $table) {
+            $table->id('id_cluster');
+            $table->string('nama_cluster');
             $table->string('slug')->unique();
             $table->text('alamat');
             $table->string('kota');
@@ -46,6 +46,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('perumahan');
+        Schema::dropIfExists('cluster');
     }
 };

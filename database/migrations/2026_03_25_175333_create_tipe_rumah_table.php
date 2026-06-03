@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('tipe_rumah', function (Blueprint $table) {
             $table->id('id_tipe');
-            $table->foreignId('perumahan_id')->constrained('perumahan', 'id_perumahan')->onDelete('cascade');
+            $table->foreignId('cluster_id')->constrained('cluster', 'id_cluster')->onDelete('cascade');
             $table->string('nama_tipe');
             $table->string('slug')->nullable();
             $table->decimal('luas_bangunan', 10, 2)->default(0);
@@ -30,7 +30,7 @@ return new class extends Migration
             $table->timestamps();
             
             // Index untuk performance
-            $table->index('perumahan_id');
+            $table->index('cluster_id');
             $table->index('slug');
         });
     }
