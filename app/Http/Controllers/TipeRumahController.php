@@ -18,22 +18,78 @@ class TipeRumahController extends Controller
         if (!Auth::guard('admin')->check()) {
             return redirect()->route('login');
         }
-        
-        $clusterId = $request->query('cluster_id');
-        
-        if ($clusterId) {
-            $cluster = Cluster::where('cluster_id', $clusterId)->firstOrFail();
-            $tipeRumah = TipeRumah::where('cluster_id', $clusterId)
-                ->orderBy('harga')
-                ->paginate(10);
-            return view('tipe-rumah.index', compact('tipeRumah', 'cluster'));
-        }
-        
-        $tipeRumah = TipeRumah::with('cluster')
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);
 
-        return view('tipe-rumah.index', compact('tipeRumah'));
+        $query = TipeRumah::with('cluster');
+        $cluster = null;
+
+        // Filter cluster
+        if ($request->filled('cluster_id')) {
+
+            $cluster = Cluster::where(
+                'cluster_id',
+                $request->cluster_id
+            )->first();
+
+            $query->where(
+                'cluster_id',
+                $request->cluster_id
+            );
+        }
+
+        // Search nama tipe
+        if ($request->filled('search')) {
+            $query->where(
+                'nama_tipe',
+                'like',
+                '%' . $request->search . '%'
+            );
+        }
+
+        // Filter status
+        if ($request->filled('status')) {
+            $query->where(
+                'status',
+                $request->status
+            );
+        }
+
+        // Sorting
+        switch ($request->sort) {
+
+            case 'harga_asc':
+                $query->orderBy('harga', 'asc');
+                break;
+
+            case 'harga_desc':
+                $query->orderBy('harga', 'desc');
+                break;
+
+            case 'terlama':
+                $query->orderBy('created_at', 'asc');
+                break;
+
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+        $tipeRumah = $query->paginate(15);
+
+        // Statistik
+        $totalTersedia = TipeRumah::where('status', 'tersedia')->count();
+        $totalPromo    = TipeRumah::where('status', 'promo')->count();
+        $totalHabis    = TipeRumah::where('status', 'habis')->count();
+
+        return view(
+            'tipe-rumah.index',
+            compact(
+                'tipeRumah',
+                'cluster',
+                'totalTersedia',
+                'totalPromo',
+                'totalHabis'
+            )
+        );
     }
 
     /**
@@ -95,7 +151,7 @@ class TipeRumahController extends Controller
             $data['status'] = 'tersedia';
         }
 
-        if ($data['status'] === 'habis') {
+       if (($data['status'] ?? null) === 'habis') {
             $data['status_unit'] = 'terjual';
         }
 
@@ -124,12 +180,16 @@ class TipeRumahController extends Controller
         // ================= FOTO DENAH =================
         if ($request->hasFile('foto_denah')) {
             $file = $request->file('foto_denah');
-            $namaFile = time() . '_denah_' . preg_replace('/[^a-zA-Z0-9._-]/', '', $file->getClientOriginalName());
-            $tujuanAdmin = public_path('uploads/tipe-rumah');
-            $tujuanFrontend = 'C:/laragon/www/perumahan-web/public/uploads/tipe-rumah';
+            $namaFile = time() . '_' . uniqid() . '_' .preg_replace('/[^a-zA-Z0-9._-]/', '', $file->getClientOriginalName());
+            $tujuanShared = '/home/u143856011/shared/uploads/tipe-rumah';
 
-            $this->saveFileToAdminAndFrontend($file, $tujuanAdmin, $tujuanFrontend, $namaFile);
-            $data['foto_denah'] = 'uploads/tipe-rumah/' . $namaFile;
+            if (!file_exists($tujuanShared)) {
+                mkdir($tujuanShared, 0775, true);
+            }
+
+            $file->move($tujuanShared, $namaFile);
+
+            $data['foto_denah'] = $namaFile;
         }
 
         // ================= FOTO RUMAH =================
@@ -138,11 +198,14 @@ class TipeRumahController extends Controller
 
             foreach ($request->file('foto_rumah') as $file) {
                 $namaFile = time() . '_' . uniqid() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '', $file->getClientOriginalName());
-                $tujuanAdmin = public_path('uploads/tipe-rumah');
-                $tujuanFrontend = 'C:/laragon/www/perumahan-web/public/uploads/tipe-rumah';
+                $tujuanShared = '/home/u143856011/shared/uploads/tipe-rumah';
 
-                $this->saveFileToAdminAndFrontend($file, $tujuanAdmin, $tujuanFrontend, $namaFile);
-                $fotoArray[] = 'uploads/tipe-rumah/' . $namaFile;
+                if (!file_exists($tujuanShared)) {
+                    mkdir($tujuanShared, 0775, true);
+                }
+
+                $file->move($tujuanShared, $namaFile);
+                $fotoArray[] = $namaFile;
             }
 
             $data['foto_rumah'] = json_encode($fotoArray);
@@ -151,8 +214,8 @@ class TipeRumahController extends Controller
         TipeRumah::create($data);
 
         // Redirect ke halaman cluster detail
-        return redirect()->route('cluster.show', $request->cluster_id)
-            ->with('success', 'Tipe rumah berhasil ditambahkan!');
+       return redirect()->route('cluster.show', $tipeRumah->cluster_id)
+        ->with('success', 'Tipe rumah berhasil diperbarui!');
     }
 
     /**
@@ -190,8 +253,11 @@ class TipeRumahController extends Controller
             ->firstOrFail();
         
         // Decode foto rumah jika JSON
+        $tipeRumah->foto_rumah_array = [];
+
         if ($tipeRumah->foto_rumah) {
             $fotoRumah = json_decode($tipeRumah->foto_rumah, true);
+
             if (is_array($fotoRumah)) {
                 $tipeRumah->foto_rumah_array = $fotoRumah;
             }
@@ -243,7 +309,7 @@ class TipeRumahController extends Controller
         unset($data['_token']);
         unset($data['_method']);
         
-        if ($data['status'] === 'habis') {
+       if (($data['status'] ?? '') === 'habis') {
             $data['status_unit'] = 'terjual';
         }
 
@@ -261,30 +327,43 @@ class TipeRumahController extends Controller
 
         // ================= HAPUS FOTO DENAH =================
         if ($request->has('hapus_foto_denah')) {
-            if ($tipeRumah->foto_denah && file_exists(public_path($tipeRumah->foto_denah))) {
-                unlink(public_path($tipeRumah->foto_denah));
+            if ($tipeRumah->foto_denah) {
+
+                $path =
+                    '/home/u143856011/shared/uploads/tipe-rumah/' .
+                    basename($tipeRumah->foto_denah);
+
+                if (file_exists($path)) {
+                    unlink($path);
+                }
             }
             $data['foto_denah'] = null;
         }
 
         // ================= UPLOAD FOTO DENAH BARU =================
         if ($request->hasFile('foto_denah')) {
-            if ($tipeRumah->foto_denah && file_exists(public_path($tipeRumah->foto_denah))) {
-                unlink(public_path($tipeRumah->foto_denah));
+           if ($tipeRumah->foto_denah) {
 
-                $existingFrontend = 'C:/laragon/www/perumahan-web/public/' . $tipeRumah->foto_denah;
-                if (file_exists($existingFrontend)) {
-                    unlink($existingFrontend);
+                $path =
+                    '/home/u143856011/shared/uploads/tipe-rumah/' .
+                    basename($tipeRumah->foto_denah);
+
+                if (file_exists($path)) {
+                    unlink($path);
                 }
             }
 
             $file = $request->file('foto_denah');
             $namaFile = time() . '_denah_' . preg_replace('/[^a-zA-Z0-9._-]/', '', $file->getClientOriginalName());
-            $tujuanAdmin = public_path('uploads/tipe-rumah');
-            $tujuanFrontend = 'C:/laragon/www/perumahan-web/public/uploads/tipe-rumah';
+            $tujuanShared = '/home/u143856011/shared/uploads/tipe-rumah';
 
-            $this->saveFileToAdminAndFrontend($file, $tujuanAdmin, $tujuanFrontend, $namaFile);
-            $data['foto_denah'] = 'uploads/tipe-rumah/' . $namaFile;
+            if (!file_exists($tujuanShared)) {
+                mkdir($tujuanShared, 0775, true);
+            }
+
+            $file->move($tujuanShared, $namaFile);
+
+            $data['foto_denah'] = $namaFile;
         }
 
         // ================= FOTO RUMAH LAMA =================
@@ -308,8 +387,15 @@ class TipeRumahController extends Controller
         // ================= HAPUS FOTO RUMAH =================
         if ($request->has('hapus_foto') && is_array($request->hapus_foto)) {
             foreach ($request->hapus_foto as $index) {
-                if (isset($fotoRumahLama[$index]) && file_exists(public_path($fotoRumahLama[$index]))) {
-                    unlink(public_path($fotoRumahLama[$index]));
+               if (isset($fotoRumahLama[$index])) {
+
+                    $path =
+                        '/home/u143856011/shared/uploads/tipe-rumah/' .
+                        basename($fotoRumahLama[$index]);
+
+                    if (file_exists($path)) {
+                        unlink($path);
+                    }
                 }
                 unset($fotoRumahLama[$index]);
             }
@@ -321,11 +407,15 @@ class TipeRumahController extends Controller
 
             foreach ($request->file('foto_rumah') as $file) {
                 $namaFile = time() . '_' . uniqid() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '', $file->getClientOriginalName());
-                $tujuanAdmin = public_path('uploads/tipe-rumah');
-                $tujuanFrontend = 'C:/laragon/www/perumahan-web/public/uploads/tipe-rumah';
+                $tujuanShared = '/home/u143856011/shared/uploads/tipe-rumah';
 
-                $this->saveFileToAdminAndFrontend($file, $tujuanAdmin, $tujuanFrontend, $namaFile);
-                $fotoBaru[] = 'uploads/tipe-rumah/' . $namaFile;
+                if (!file_exists($tujuanShared)) {
+                    mkdir($tujuanShared, 0775, true);
+                }
+
+                $file->move($tujuanShared, $namaFile);
+
+                $fotoBaru[] = $namaFile;
             }
 
             $fotoRumahLama = array_merge($fotoRumahLama, $fotoBaru);
@@ -363,13 +453,14 @@ class TipeRumahController extends Controller
         
         $tipeRumah = TipeRumah::where('id_tipe', $id)->firstOrFail();
 
-        // Hapus foto denah
-        if ($tipeRumah->foto_denah && file_exists(public_path($tipeRumah->foto_denah))) {
-            unlink(public_path($tipeRumah->foto_denah));
+        if ($tipeRumah->foto_denah) {
 
-            $frontendDenah = 'C:/laragon/www/perumahan-web/public/' . $tipeRumah->foto_denah;
-            if (file_exists($frontendDenah)) {
-                unlink($frontendDenah);
+            $path =
+                '/home/u143856011/shared/uploads/tipe-rumah/' .
+                basename($tipeRumah->foto_denah);
+
+            if (file_exists($path)) {
+                unlink($path);
             }
         }
 
@@ -378,13 +469,12 @@ class TipeRumahController extends Controller
             $fotoRumah = is_string($tipeRumah->foto_rumah) ? json_decode($tipeRumah->foto_rumah, true) : $tipeRumah->foto_rumah;
             if (is_array($fotoRumah)) {
                 foreach ($fotoRumah as $foto) {
-                    if ($foto && file_exists(public_path($foto))) {
-                        unlink(public_path($foto));
-                    }
+                    $path =
+                        '/home/u143856011/shared/uploads/tipe-rumah/' .
+                        basename($foto);
 
-                    $frontendFoto = 'C:/laragon/www/perumahan-web/public/' . ltrim($foto, '/');
-                    if ($foto && file_exists($frontendFoto)) {
-                        unlink($frontendFoto);
+                    if ($foto && file_exists($path)) {
+                        unlink($path);
                     }
                 }
             }

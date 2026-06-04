@@ -13,14 +13,14 @@
             </h4>
             <p class="text-muted small mb-0">
                 <i class="fas fa-building me-1 text-success"></i>
-                Cluster: <strong>{{ $tipeRumah->cluster->nama_cluster ?? ($tipeRumah->cluster->nama_cluster ?? '-') }}</strong>
+                Cluster: <strong>{{ $tipeRumah->cluster->nama_cluster ?? '-' }}</strong>
             </p>
         </div>
         <div>
             <a href="{{ route('tipe-rumah.edit', $tipeRumah->id_tipe) }}" class="btn btn-warning btn-sm me-2">
                 <i class="fas fa-edit me-1"></i>Edit
             </a>
-            <a href="{{ route('tipe-rumah.index') }}" class="btn btn-outline-secondary btn-sm">
+            <a href="{{ route('cluster.show', $tipeRumah->cluster_id) }}" class="btn btn-outline-secondary btn-sm">
                 <i class="fas fa-arrow-left me-1"></i>Kembali
             </a>
         </div>
@@ -43,7 +43,7 @@
                         </tr>
                         <tr>
                             <td><strong>Cluster</strong></td>
-                            <td>: {{ $tipeRumah->cluster->nama_cluster ?? ($tipeRumah->cluster->nama_cluster ?? '-') }}</td>
+                            <td>: {{ $tipeRumah->cluster->nama_cluster ?? '-' }}</td>
                         </tr>
                         <tr>
                             <td><strong>Luas Bangunan</strong></td>
@@ -160,7 +160,7 @@
     @endif
 
     <!-- Foto Denah -->
-    @if($tipeRumah->foto_denah && file_exists(public_path($tipeRumah->foto_denah)))
+   @if($tipeRumah->foto_denah)
     <div class="card border-0 shadow-sm rounded-4 mb-4">
         <div class="card-header bg-white border-0 pt-4 px-4">
             <h5 class="fw-semibold mb-0">
@@ -168,7 +168,11 @@
             </h5>
         </div>
         <div class="card-body p-4 text-center">
-            <img src="{{ asset($tipeRumah->foto_denah) }}" class="img-fluid rounded" style="max-height: 400px;" alt="Denah {{ $tipeRumah->nama_tipe }}">
+           <img
+            src="{{ route('media.tipe-rumah', $tipeRumah->foto_denah) }}"
+            class="img-fluid rounded"
+            style="max-height:400px;"
+            alt="Denah {{ $tipeRumah->nama_tipe }}">
         </div>
     </div>
     @endif
@@ -197,8 +201,12 @@
             <div class="row g-3">
                 @foreach($fotoRumah as $foto)
                 <div class="col-md-3 col-6">
-                    <div class="position-relative overflow-hidden rounded-3 shadow-sm" style="cursor: pointer;" onclick="openLightbox('{{ asset($foto) }}')">
-                        <img src="{{ asset($foto) }}" class="img-fluid w-100" style="height: 180px; object-fit: cover;" alt="Foto Rumah">
+                    <div class="position-relative overflow-hidden rounded-3 shadow-sm" style="cursor: pointer;" onclick="openLightbox('{{ route('media.tipe-rumah', $foto) }}')">
+                        <img
+                        src="{{ route('media.tipe-rumah', $foto) }}"
+                        class="img-fluid w-100"
+                        style="height:180px; object-fit:cover;"
+                        alt="Foto Rumah">
                         <div class="position-absolute bottom-0 start-0 end-0 bg-dark bg-opacity-50 text-white text-center py-1">
                             <i class="fas fa-search-plus"></i> Lihat
                         </div>

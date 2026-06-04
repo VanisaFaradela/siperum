@@ -133,6 +133,64 @@
                     </div>
                 </div>
 
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Foto Denah</label>
+
+                    @if($tipeRumah->foto_denah)
+                        <div class="mb-2">
+                            <img src="{{ asset('uploads/tipe-rumah/' . $tipeRumah->foto_denah) }}"
+                                class="img-thumbnail"
+                                style="max-height:150px;">
+                        </div>
+
+                        <div class="form-check mb-2">
+                            <input class="form-check-input"
+                                type="checkbox"
+                                name="hapus_foto_denah"
+                                value="1">
+                            <label class="form-check-label">
+                                Hapus Foto Denah
+                            </label>
+                        </div>
+                    @endif
+
+                    <input type="file"
+                        name="foto_denah"
+                        class="form-control"
+                        accept="image/*">
+                </div>
+
+                <div class="col-md-12 mb-3">
+                    <label class="form-label fw-semibold">Foto Rumah</label>
+
+                    @if(!empty($tipeRumah->foto_rumah_array))
+                        <div class="row">
+                            @foreach($tipeRumah->foto_rumah_array as $index => $foto)
+                                <div class="col-md-3 mb-3">
+                                    <img src="{{ asset('uploads/tipe-rumah/' . $foto) }}"
+                                        class="img-thumbnail mb-2">
+
+                                    <div class="form-check">
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            name="hapus_foto[]"
+                                            value="{{ $index }}">
+                                        <label class="form-check-label">
+                                            Hapus Foto
+                                        </label>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+
+                    <input type="file"
+                        name="foto_rumah[]"
+                        class="form-control"
+                        multiple
+                        accept="image/*">
+                </div>
+
                 <div class="text-end mt-4 pt-3 border-top">
                     <a href="{{ route('tipe-rumah.index') }}" class="btn btn-light me-2">
                         <i class="fas fa-times me-2"></i>Batal
