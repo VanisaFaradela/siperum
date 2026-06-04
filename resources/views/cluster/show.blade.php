@@ -13,7 +13,7 @@
             </h4>
             <p class="text-muted small">
                 <i class="fas fa-map-marker-alt me-1"></i>
-                {{ $cluster->lokasi_cluster }}, {{ $cluster->kota }}, {{ $cluster->provinsi }}
+                {{ $cluster->Alamat }}, {{ $cluster->kota }}, {{ $cluster->provinsi }}
             </p>
         </div>
         <div>
@@ -59,7 +59,7 @@
                             </div>
                             <div class="mb-3">
                                 <label class="text-muted small text-uppercase fw-semibold">Lokasi Cluster</label>
-                                <p class="mb-0">{{ $cluster->lokasi_cluster }}</p>
+                                <p class="mb-0">{{ $cluster->Alamat }}</p>
                             </div>
                             <div class="mb-3">
                                 <label class="text-muted small text-uppercase fw-semibold">Kota</label>

@@ -16,7 +16,7 @@ class Cluster extends Model
     protected $fillable = [
         'nama_cluster',
         'slug',
-        'lokasi_cluster',
+        'Alamat',
         'kota',
         'provinsi',
         'kode_pos',

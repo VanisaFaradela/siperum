@@ -60,9 +60,9 @@
                             
                             <div class="col-md-12 mb-3">
                                 <label class="form-label fw-semibold">Lokasi Cluster <span class="text-danger">*</span></label>
-                                <textarea name="lokasi_cluster" class="form-control @error('lokasi_cluster') is-invalid @enderror" 
-                                          rows="2" placeholder="Jl. Contoh No. 123" required>{{ old('lokasi_cluster', $cluster->lokasi_cluster) }}</textarea>
-                                @error('lokasi_cluster')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                <textarea name="Alamat" class="form-control @error('Alamat') is-invalid @enderror" 
+                                          rows="2" placeholder="Jl. Contoh No. 123" required>{{ old('Alamat', $cluster->Alamat) }}</textarea>
+                                @error('Alamat')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                             
                             <div class="col-md-4 mb-3">

@@ -161,7 +161,7 @@
                         </a>
                         <br>
                         <small class="text-muted">
-                            <i class="fas fa-map-marker-alt me-1"></i>{{ Str::limit($item->lokasi_cluster, 50) }}
+                            <i class="fas fa-map-marker-alt me-1"></i>{{ Str::limit($item->Alamat, 50) }}
                         </small>
                     </td>
                     <td>{{ $item->kota }}</td>

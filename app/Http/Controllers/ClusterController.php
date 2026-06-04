@@ -29,7 +29,7 @@ class ClusterController extends Controller
         $clusters = Cluster::with('tipeRumah')
             ->when($search, function ($query, $search) {
                 return $query->where('nama_cluster', 'like', "%{$search}%")
-                             ->orWhere('lokasi_cluster', 'like', "%{$search}%")
+                             ->orWhere('Alamat', 'like', "%{$search}%")
                              ->orWhere('kota', 'like', "%{$search}%");
             })
             ->when($kota, function ($query, $kota) {
@@ -134,7 +134,7 @@ class ClusterController extends Controller
 
         $request->validate([
             'nama_cluster' => 'required|min:3|max:255',
-            'lokasi_cluster' => 'nullable|string',
+            'Alamat' => 'nullable|string',
             'kota' => 'required',
             'provinsi' => 'required',
             'nama_pengembang' => 'required',
@@ -253,7 +253,7 @@ class ClusterController extends Controller
         
         $request->validate([
             'nama_cluster' => 'required|min:3|max:255',
-            'lokasi_cluster' => 'required|string',
+            'Alamat' => 'required|string',
             'kota' => 'required',
             'provinsi' => 'required',
             'nama_pengembang' => 'required',

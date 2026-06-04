@@ -84,13 +84,13 @@
                             Lokasi Cluster <span class="text-danger">*</span>
                         </label>
 
-                        <textarea name="lokasi_cluster"
+                        <textarea name="Alamat"
                                   rows="3"
-                                  class="form-control @error('lokasi_cluster') is-invalid @enderror"
+                                  class="form-control @error('Alamat') is-invalid @enderror"
                                   placeholder="Masukkan alamat lengkap cluster"
-                                  required>{{ old('lokasi_cluster') }}</textarea>
+                                  required>{{ old('Alamat') }}</textarea>
 
-                        @error('lokasi_cluster')
+                        @error('Alamat')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
