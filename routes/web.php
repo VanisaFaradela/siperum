@@ -10,10 +10,8 @@ use App\Http\Controllers\GaleriController;
 use App\Http\Controllers\KontakController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PengaturanController;
-use App\Http\Controllers\PengaturanWebsiteController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\TeamController;
-use App\Http\Controllers\TentangKamiController;
 use App\Http\Controllers\PromoController;
 
 /*
@@ -121,20 +119,6 @@ Route::get('/media/pages/{file}', function ($file) {
 })->where('file', '.*')->name('media.pages');
 
 // ============================================
-// PENGATURAN WEBSITE
-// ============================================
-Route::prefix('pengaturan-website')->group(function () {
-    Route::get('/', [PengaturanWebsiteController::class, 'index'])->name('pengaturan-website.index');
-    Route::put('/website', [PengaturanWebsiteController::class, 'updateWebsite'])->name('pengaturan-website.website');
-    Route::put('/owner', [PengaturanWebsiteController::class, 'updateOwner'])->name('pengaturan-website.owner');
-    Route::put('/kontak', [PengaturanWebsiteController::class, 'updateKontak'])->name('pengaturan-website.kontak');
-    Route::put('/sosial', [PengaturanWebsiteController::class, 'updateSosialMedia'])->name('pengaturan-website.sosial');
-    Route::put('/tentang', [PengaturanWebsiteController::class, 'updateTentangKami'])->name('pengaturan-website.tentang');
-    Route::put('/hero', [PengaturanWebsiteController::class, 'updateHero'])->name('pengaturan-website.hero');
-    Route::put('/footer', [PengaturanWebsiteController::class, 'updateFooter'])->name('pengaturan-website.footer');
-});
-
-// ============================================
 // TENTANG KAMI (ADMIN EDIT)
 // ============================================
 Route::get('/tentang-kami/edit', [TentangKamiController::class, 'edit'])->name('tentang-kami.edit');
@@ -176,8 +160,3 @@ Route::post('/promo-modal-seen-tipe', function() {
     session(['promo_closed_tipe' => true]);
     return response()->json(['success' => true]);
 })->name('promo.modal.seen.tipe');
-
-// ============================================
-// FRONTEND PAGES (HARUS DI PALING BAWAH)
-// ============================================
-Route::get('/{slug}', [PageController::class, 'show'])->name('page.show')->where('slug', '.*');

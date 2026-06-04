@@ -137,8 +137,8 @@
                                     <td>MySQL</td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Total Perumahan</strong></td>
-                                    <td>{{ \App\Models\Perumahan::count() }}</td>
+                                    <td><strong>Total Cluster</strong></td>
+                                    <td>{{ \App\Models\Cluster::count() }}</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Total Berita</strong></td>
