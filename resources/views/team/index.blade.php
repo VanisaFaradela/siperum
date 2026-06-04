@@ -140,7 +140,8 @@
                         @if($item->foto)
                             <img src="{{ route('media.team', basename($item->foto)) }}"
                                 class="rounded-circle"
-                                style="width:50px;height:50px;object-fit:cover;">
+                                style="width:50px;height:50px;object-fit:cover;"
+                                alt="{{ $item->nama }}">
                         @else
                             <div class="bg-light rounded-circle d-flex align-items-center justify-content-center"
                                 style="width:50px;height:50px;">
