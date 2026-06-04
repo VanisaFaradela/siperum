@@ -57,7 +57,7 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold">Telepon</label>
                                 <input type="text" name="telepon" class="form-control @error('telepon') is-invalid @enderror" 
-                                       value="{{ old('telepon') }}" placeholder="0812-3456-7890">
+                                        maxlength="20"value="{{ old('telepon') }}" placeholder="0812-3456-7890">
                                 @error('telepon')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                         </div>
@@ -65,8 +65,15 @@
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Status</label>
                             <select name="status" class="form-select @error('status') is-invalid @enderror">
-                                <option value="aktif" {{ old('status') == 'aktif' ? 'selected' : '' }}>Aktif</option>
-                                <option value="nonaktif" {{ old('status') == 'nonaktif' ? 'selected' : '' }}>Nonaktif</option>
+                                <option value="aktif"
+                                    {{ old('status','aktif') == 'aktif' ? 'selected' : '' }}>
+                                    Aktif
+                                </option>
+
+                                <option value="nonaktif"
+                                    {{ old('status','nonaktif') == 'nonaktif' ? 'selected' : '' }}>
+                                    Nonaktif
+                                </option>
                             </select>
                             @error('status')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
@@ -75,8 +82,10 @@
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Foto</label>
-                            <input type="file" name="foto" class="form-control @error('foto') is-invalid @enderror" 
-                                   accept="image/*" onchange="previewImage(this, 'preview-foto')">
+                            <input type="file" name="foto"
+                                    class="form-control @error('foto') is-invalid @enderror"
+                                    accept=".jpg,.jpeg,.png"
+                                    onchange="previewImage(this, 'preview-foto')">
                             <small class="text-muted">Format: JPG, PNG. Maks: 2MB. Rekomendasi foto persegi (1:1)</small>
                             @error('foto')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             <div class="mt-3 text-center" id="preview-foto-container" style="display: none;">
@@ -102,20 +111,32 @@
 @push('scripts')
 <script>
     function previewImage(input, previewId) {
+
         const preview = document.getElementById(previewId);
         const container = document.getElementById(previewId + '-container');
-        
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-                container.style.display = 'block';
-            }
-            reader.readAsDataURL(input.files[0]);
-        } else {
-            preview.src = '#';
+
+        if (!input.files || !input.files[0]) {
             container.style.display = 'none';
+            return;
         }
+
+        const file = input.files[0];
+
+        if (!file.type.startsWith('image/')) {
+            alert('File harus berupa gambar');
+            input.value = '';
+            container.style.display = 'none';
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            container.style.display = 'block';
+        };
+
+        reader.readAsDataURL(file);
     }
 </script>
 @endpush

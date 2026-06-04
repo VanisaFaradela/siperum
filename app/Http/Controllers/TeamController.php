@@ -77,29 +77,13 @@ class TeamController extends Controller
                 $file->getClientOriginalName()
             );
 
-            // PATH ADMIN
-            $tujuanAdmin = public_path('uploads/team');
+            $tujuanShared = '/home/u143856011/shared/uploads/team';
 
-            // PATH FRONTEND
-            $tujuanFrontend = 'C:/laragon/www/perumahan-web/public/uploads/team';
-
-            // Buat folder jika belum ada
-            if (!file_exists($tujuanAdmin)) {
-                mkdir($tujuanAdmin, 0777, true);
+            if (!file_exists($tujuanShared)) {
+                mkdir($tujuanShared, 0775, true);
             }
 
-            if (!file_exists($tujuanFrontend)) {
-                mkdir($tujuanFrontend, 0777, true);
-            }
-
-            // Upload ke ADMIN
-            $file->move($tujuanAdmin, $namaFile);
-
-            // Copy ke FRONTEND
-            copy(
-                $tujuanAdmin . '/' . $namaFile,
-                $tujuanFrontend . '/' . $namaFile
-            );
+            $file->move($tujuanShared, $namaFile);
 
             $data['foto'] = 'uploads/team/' . $namaFile;
         }
@@ -143,25 +127,33 @@ class TeamController extends Controller
 
         // Hapus foto jika dicentang
         if ($request->has('hapus_foto')) {
-            if ($team->foto && file_exists(public_path($team->foto))) {
-                unlink(public_path($team->foto));
+
+            if ($team->foto) {
+
+                $filePath =
+                    '/home/u143856011/shared/uploads/team/' .
+                    basename($team->foto);
+
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
             }
+
             $data['foto'] = null;
         }
 
         // Upload foto baru
         if ($request->hasFile('foto')) {
 
-            // Hapus foto lama ADMIN
-            if ($team->foto && file_exists(public_path($team->foto))) {
-                unlink(public_path($team->foto));
-            }
+            if ($team->foto) {
 
-            // Hapus foto lama FRONTEND
-            $fotoFrontendLama = 'C:/laragon/www/perumahan-web/public/' . $team->foto;
+                $fileLama =
+                    '/home/u143856011/shared/uploads/team/' .
+                    basename($team->foto);
 
-            if ($team->foto && file_exists($fotoFrontendLama)) {
-                unlink($fotoFrontendLama);
+                if (file_exists($fileLama)) {
+                    unlink($fileLama);
+                }
             }
 
             $file = $request->file('foto');
@@ -172,29 +164,13 @@ class TeamController extends Controller
                 $file->getClientOriginalName()
             );
 
-            // PATH ADMIN
-            $tujuanAdmin = public_path('uploads/team');
+            $tujuanShared = '/home/u143856011/shared/uploads/team';
 
-            // PATH FRONTEND
-            $tujuanFrontend = 'C:/laragon/www/perumahan-web/public/uploads/team';
-
-            // Buat folder jika belum ada
-            if (!file_exists($tujuanAdmin)) {
-                mkdir($tujuanAdmin, 0777, true);
+            if (!file_exists($tujuanShared)) {
+                mkdir($tujuanShared, 0775, true);
             }
 
-            if (!file_exists($tujuanFrontend)) {
-                mkdir($tujuanFrontend, 0777, true);
-            }
-
-            // Upload ke ADMIN
-            $file->move($tujuanAdmin, $namaFile);
-
-            // Copy ke FRONTEND
-            copy(
-                $tujuanAdmin . '/' . $namaFile,
-                $tujuanFrontend . '/' . $namaFile
-            );
+            $file->move($tujuanShared, $namaFile);
 
             $data['foto'] = 'uploads/team/' . $namaFile;
         }
@@ -213,16 +189,15 @@ class TeamController extends Controller
         
         $team = Team::findOrFail($id);
         
-        // Hapus foto ADMIN
-        if ($team->foto && file_exists(public_path($team->foto))) {
-            unlink(public_path($team->foto));
-        }
+        if ($team->foto) {
 
-        // Hapus foto FRONTEND
-        $fotoFrontend = 'C:/laragon/www/perumahan-web/public/' . $team->foto;
+            $filePath =
+                '/home/u143856011/shared/uploads/team/' .
+                basename($team->foto);
 
-        if ($team->foto && file_exists($fotoFrontend)) {
-            unlink($fotoFrontend);
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
         }
         
         $team->delete();

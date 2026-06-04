@@ -148,6 +148,15 @@ Route::prefix('admin')->group(function () {
     Route::patch('/team/{id}/toggle-status', [TeamController::class, 'toggleStatus'])->name('team.toggle-status');
     Route::post('/team/reorder', [TeamController::class, 'updateOrder'])->name('team.reorder');
 });
+Route::get('/media/team/{file}', function ($file) {
+
+    $path = '/home/u143856011/shared/uploads/team/' . $file;
+
+    abort_unless(file_exists($path), 404);
+
+    return response()->file($path);
+
+})->where('file', '.*')->name('media.team');
 
 // ============================================
 // PROMO
