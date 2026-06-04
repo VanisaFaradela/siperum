@@ -85,7 +85,7 @@ class PageController extends Controller
                 $image->getClientOriginalName()
             );
 
-           $sharedPath = env('SHARED_UPLOADS_PATH') . '/pages';
+           $sharedPath = '/home/u143856011/shared/uploads/pages';
 
             if (!file_exists($sharedPath)) {
                 mkdir($sharedPath, 0775, true);
@@ -154,10 +154,10 @@ class PageController extends Controller
         // Upload gambar baru
         if ($request->hasFile('featured_image')) {
 
-            $sharedPath = env('SHARED_UPLOADS_PATH');
+            $sharedPath = '/home/u143856011/shared/uploads/pages';
 
             $fileLama =
-                $sharedPath . '/pages/' .
+                $sharedPath . '/' .
                 basename($page->featured_image);
 
             if (file_exists($fileLama)) {
@@ -172,7 +172,7 @@ class PageController extends Controller
                 $image->getClientOriginalName()
             );
 
-           $sharedPath = env('SHARED_UPLOADS_PATH') . '/pages';
+           $sharedPath = '/home/u143856011/shared/uploads/pages';
 
             if (!file_exists($sharedPath)) {
                 mkdir($sharedPath, 0775, true);
@@ -186,10 +186,10 @@ class PageController extends Controller
         // Hapus gambar jika dicentang
         if ($request->has('hapus_image') || $request->has('hapus_gambar')) {
 
-            $sharedPath = env('SHARED_UPLOADS_PATH');
+            $sharedPath = '/home/u143856011/shared/uploads/pages';
 
             $fileLama =
-                $sharedPath . '/pages/' .
+                $sharedPath . '/' .
                 basename($page->featured_image);
 
             if (file_exists($fileLama)) {
@@ -233,10 +233,10 @@ class PageController extends Controller
         // Hapus gambar ADMIN
         if ($page->featured_image) {
 
-            $sharedPath = env('SHARED_UPLOADS_PATH');
+            $sharedPath = '/home/u143856011/shared/uploads/pages';
 
             $filePath =
-                $sharedPath . '/pages/' .
+                $sharedPath . '/' .
                 basename($page->featured_image);
 
             if (file_exists($filePath)) {

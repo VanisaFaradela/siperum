@@ -50,7 +50,7 @@
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Gambar Saat Ini</label>
                             <div class="border rounded-3 p-3 text-center bg-light">
-                                <img src="{{ asset($page->featured_image) }}"
+                                <img src="{{ url($page->featured_image) }}"
                                     class="img-fluid rounded"
                                     style="max-height: 150px;">
 
