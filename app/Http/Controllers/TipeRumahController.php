@@ -26,7 +26,7 @@ class TipeRumahController extends Controller
         if ($request->filled('cluster_id')) {
 
             $cluster = Cluster::where(
-                'cluster_id',
+                'id_cluster',
                 $request->cluster_id
             )->first();
 
@@ -211,11 +211,10 @@ class TipeRumahController extends Controller
             $data['foto_rumah'] = json_encode($fotoArray);
         }
 
-        TipeRumah::create($data);
+        $tipeRumah = TipeRumah::create($data);
 
-        // Redirect ke halaman cluster detail
-       return redirect()->route('cluster.show', $tipeRumah->cluster_id)
-        ->with('success', 'Tipe rumah berhasil diperbarui!');
+        return redirect()->route('cluster.show', $tipeRumah->cluster_id)
+            ->with('success', 'Tipe rumah berhasil ditambahkan!');
     }
 
     /**
@@ -282,7 +281,7 @@ class TipeRumahController extends Controller
         $tipeRumah = TipeRumah::where('id_tipe', $id)->firstOrFail();
         
         $request->validate([
-            'cluster_id' => 'required|exists:cluster,cluster_id',
+            'cluster_id' => 'required|exists:cluster,id_cluster',
             'nama_tipe' => 'required|min:3|max:255',
             'luas_bangunan' => 'nullable|numeric|min:0',
             'luas_tanah' => 'nullable|numeric|min:0',

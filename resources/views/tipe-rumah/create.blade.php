@@ -32,7 +32,7 @@
                         <select name="cluster_id" class="form-select @error('cluster_id') is-invalid @enderror" required>
                             <option value="">-- Pilih Cluster --</option>
                             @foreach($clusters as $c)
-                                <option value="{{ $c->cluster_id }}" {{ old('cluster_id') == $c->cluster_id ? 'selected' : '' }}>
+                                <option value="{{ $c->id_cluster }}" {{ old('cluster_id') == $c->id_cluster ? 'selected' : '' }}>
                                     {{ $c->nama_cluster }} ({{ $c->kota ?? 'Lokasi' }})
                                 </option>
                             @endforeach

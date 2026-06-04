@@ -9,7 +9,7 @@
         Manajemen Tipe Rumah
     </h4>
     @if(isset($cluster))
-        <a href="{{ route('cluster.show', $cluster->cluster_id) }}" class="btn btn-outline-secondary">
+        <a href="{{ route('cluster.show', $cluster->id_cluster) }}" class="btn btn-outline-secondary">
             <i class="fas fa-arrow-left me-2"></i>Kembali ke {{ $cluster->nama_cluster }}
         </a>
     @else
@@ -97,7 +97,7 @@
 <div class="card-cluster p-4 mb-4">
     <form method="GET" action="{{ route('tipe-rumah.index') }}" class="row g-3">
         @if(isset($cluster))
-            <input type="hidden" name="cluster_id" value="{{ $cluster->cluster_id }}">
+            <input type="hidden" name="cluster_id" value="{{ $cluster->id_cluster }}">
         @endif
         <div class="col-md-5">
             <label class="form-label small fw-semibold">Cari Tipe Rumah</label>
@@ -162,7 +162,7 @@
                         @endif
                     </td>
                     <td>
-                        <a href="{{ route('cluster.show', $item->cluster->cluster_id) }}" class="text-decoration-none">
+                        <a href="{{ route('cluster.show', $item->cluster->id_cluster) }}" class="text-decoration-none">
                             {{ $item->cluster->nama_cluster ?? '-' }}
                         </a>
                     </td>
@@ -224,7 +224,7 @@
                         <i class="fas fa-tags fa-4x text-muted mb-3"></i>
                         <h6 class="text-muted">Belum ada data tipe rumah</h6>
                         @if(isset($cluster))
-                            <a href="{{route('tipe-rumah.create', ['cluster_id' => $cluster->cluster_id])}}" class="btn btn-green btn-sm mt-2">
+                            <a href="{{route('tipe-rumah.create', ['cluster_id' => $cluster->id_cluster])}}" class="btn btn-green btn-sm mt-2">
                                 <i class="fas fa-plus me-2"></i>Tambah Tipe Rumah
                             </a>
                         @else
