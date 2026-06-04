@@ -194,10 +194,6 @@
                     </td>
                     <td>
                         <div class="btn-group">
-                            <a href="{{ url('/' . $item->slug) }}" target="_blank" class="btn btn-sm btn-outline-info" 
-                               data-bs-toggle="tooltip" title="Lihat Halaman">
-                                <i class="fas fa-eye"></i>
-                            </a>
                             <a href="{{ route('pages.edit', $item->id) }}" class="btn btn-sm btn-outline-warning"
                                data-bs-toggle="tooltip" title="Edit">
                                 <i class="fas fa-edit"></i>
