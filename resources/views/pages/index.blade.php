@@ -73,7 +73,7 @@
                 </div>
                 <div class="flex-grow-1 ms-3">
                     <h6 class="text-muted mb-1">Dengan Video</h6>
-                    <h3 class="fw-bold mb-0">{{ $pages->whereNotNull('video')->count() }}</h3>
+                    <h3 class="fw-bold mb-0">{{ $totalVideo ?? 0 }}</h3>
                 </div>
             </div>
         </div>
@@ -144,7 +144,7 @@
                 <tr>
                     <td class="text-center">{{ $pages->firstItem() + $index }}</td>
                     <td>
-                        @if($item->featured_image && file_exists(public_path($item->featured_image)))
+                        @if($item->featured_image)
                             <img src="{{ asset($item->featured_image) }}" class="rounded" 
                                  style="width: 50px; height: 45px; object-fit: cover;" alt="Gambar">
                         @else

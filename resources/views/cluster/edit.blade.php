@@ -251,7 +251,7 @@
                                 <label class="form-label fw-semibold">Logo Cluster</label>
                                 @if($cluster->logo_cluster)
                                     <div class="mb-2">
-                                        <img src="{{ asset($cluster->logo_cluster) }}" class="img-fluid rounded border p-1" style="max-height: 80px;">
+                                        <img src="{{ url($cluster->logo_cluster) }}" class="img-fluid rounded border p-1" style="max-height: 80px;">
                                         <div class="form-check mt-2">
                                             <input type="checkbox" name="hapus_logo" class="form-check-input" id="hapus_logo" value="1">
                                             <label class="form-check-label text-danger" for="hapus_logo">Hapus logo</label>
@@ -271,7 +271,7 @@
                                 <label class="form-label fw-semibold">Gambar Cluster</label>
                                 @if($cluster->gambar_cluster)
                                     <div class="mb-2">
-                                        <img src="{{ asset($cluster->gambar_cluster) }}" class="img-fluid rounded border p-1" style="max-height: 80px;">
+                                        <img src="{{ url($cluster->gambar_cluster) }}" class="img-fluid rounded border p-1" style="max-height: 80px;">
                                         <div class="form-check mt-2">
                                             <input type="checkbox" name="hapus_gambar" class="form-check-input" id="hapus_gambar" value="1">
                                             <label class="form-check-label text-danger" for="hapus_gambar">Hapus gambar utama</label>
@@ -308,7 +308,7 @@
                                         <div class="row">
                                             @foreach($fotoLainnya as $index => $foto)
                                             <div class="col-md-2 mb-2">
-                                                <img src="{{ asset($foto) }}" class="img-fluid rounded border p-1" style="height: 60px; width: 100%; object-fit: cover;">
+                                                <img src="{{ url($foto) }}" class="img-fluid rounded border p-1" style="height: 60px; width: 100%; object-fit: cover;">
                                                 <div class="form-check mt-1">
                                                     <input type="checkbox" name="hapus_foto_lainnya[]" value="{{ $index }}" class="form-check-input">
                                                     <label class="form-check-label small text-danger">Hapus</label>

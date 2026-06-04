@@ -221,10 +221,10 @@
                         </label>
 
                         <select name="sertifikat" class="form-select">
-                            <option value="SHM">SHM</option>
-                            <option value="HGB">HGB</option>
-                            <option value="HPL">HPL</option>
-                            <option value="Lainnya">Lainnya</option>
+                            <option value="SHM" {{ old('sertifikat') == 'SHM' ? 'selected' : '' }}>SHM</option>
+                            <option value="HGB" {{ old('sertifikat') == 'HGB' ? 'selected' : '' }}>HGB</option>
+                            <option value="HPL" {{ old('sertifikat') == 'HPL' ? 'selected' : '' }}>HPL</option>
+                            <option value="Lainnya" {{ old('sertifikat') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
                         </select>
                     </div>
 
@@ -246,9 +246,17 @@
                         </label>
 
                         <select name="status" class="form-select">
-                            <option value="draft">Draft</option>
-                            <option value="aktif">Aktif</option>
-                            <option value="nonaktif">Nonaktif</option>
+                           <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>
+                                Draft
+                            </option>
+
+                            <option value="aktif" {{ old('status') == 'aktif' ? 'selected' : '' }}>
+                                Aktif
+                            </option>
+
+                            <option value="nonaktif" {{ old('status') == 'nonaktif' ? 'selected' : '' }}>
+                                Nonaktif
+                            </option>
                         </select>
                     </div>
 
@@ -298,9 +306,9 @@
                     <div class="col-md-4">
                         <div class="form-check">
                             <input type="checkbox"
-                                   class="form-check-input"
-                                   name="akses_air_bersih"
-                                   value="1">
+                                    name="akses_air_bersih"
+                                    value="1"
+                                    {{ old('akses_air_bersih') ? 'checked' : '' }}>
 
                             <label class="form-check-label">
                                 Akses Air Bersih
@@ -313,7 +321,8 @@
                             <input type="checkbox"
                                    class="form-check-input"
                                    name="keamanan_24jam"
-                                   value="1">
+                                   value="1"
+                                   {{ old('keamanan_24jam') ? 'checked' : '' }}>
 
                             <label class="form-check-label">
                                 Keamanan 24 Jam
@@ -326,7 +335,8 @@
                             <input type="checkbox"
                                    class="form-check-input"
                                    name="one_gate_system"
-                                   value="1">
+                                   value="1"
+                                   {{ old('one_gate_system') ? 'checked' : '' }}>
 
                             <label class="form-check-label">
                                 One Gate System
@@ -349,10 +359,10 @@
                         </label>
 
                         <input type="file"
-                               name="logo"
-                               class="form-control"
-                               accept="image/*"
-                               onchange="previewImage(this, 'preview-logo')">
+                                name="logo_cluster"
+                                class="form-control"
+                                accept="image/*"
+                                onchange="previewImage(this, 'preview-logo')">
 
                         <div class="mt-3 text-center"
                              id="preview-logo-container"
@@ -370,10 +380,10 @@
                         </label>
 
                         <input type="file"
-                               name="foto_utama"
-                               class="form-control"
-                               accept="image/*"
-                               onchange="previewImage(this, 'preview-utama')">
+                                name="gambar_cluster"
+                                class="form-control"
+                                accept="image/*"
+                                onchange="previewImage(this, 'preview-utama')">
 
                         <div class="mt-3 text-center"
                              id="preview-utama-container"

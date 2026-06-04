@@ -139,14 +139,14 @@
                     <th>Progress</th>
                     <th>Status</th>
                     <th width="150">Aksi</th>
-                </thead>
+            </thead>
             <tbody>
                 @forelse($clusters as $index => $item)
                 <tr>
                     <td class="text-center">{{ $clusters->firstItem() + $index }}</td>
                     <td>
                         @if($item->logo_cluster)
-                            <img src="{{ asset($item->logo_cluster) }}" class="rounded-circle" 
+                            <img src="{{ url($item->logo_cluster) }}" class="rounded-circle" 
                                  style="width: 50px; height: 50px; object-fit: cover;" alt="Logo">
                         @else
                             <div class="bg-light rounded-circle d-flex align-items-center justify-content-center" 

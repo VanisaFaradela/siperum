@@ -30,30 +30,30 @@ class Page extends Model
     protected static function boot()
     {
         parent::boot();
-        
+
         static::creating(function ($page) {
             $page->slug = Str::slug($page->title);
         });
-        
+
         static::updating(function ($page) {
             $page->slug = Str::slug($page->title);
         });
     }
 
-    // Accessor untuk mendapatkan URL video YouTube yang embeddable
     public function getEmbedVideoAttribute()
     {
-        if (!$this->video) return null;
-        
-        // Konversi URL YouTube ke embed URL
-        if (strpos($this->video, 'youtube.com/watch?v=') !== false) {
-            $videoId = str_replace('https://www.youtube.com/watch?v=', '', $this->video);
-            return 'https://www.youtube.com/embed/' . $videoId;
-        } elseif (strpos($this->video, 'youtu.be/') !== false) {
-            $videoId = str_replace('https://youtu.be/', '', $this->video);
-            return 'https://www.youtube.com/embed/' . $videoId;
+        if (!$this->video) {
+            return null;
         }
-        
+
+        if (preg_match('/(?:youtube\.com\/watch\?v=)([^&]+)/', $this->video, $matches)) {
+            return 'https://www.youtube.com/embed/' . $matches[1];
+        }
+
+        if (preg_match('/(?:youtu\.be\/)([^?&]+)/', $this->video, $matches)) {
+            return 'https://www.youtube.com/embed/' . $matches[1];
+        }
+
         return $this->video;
     }
 }

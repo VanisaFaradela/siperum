@@ -46,19 +46,25 @@
 
                     <div class="col-md-4">
                         <!-- Gambar Saat Ini -->
-                        @php
-                            $imagePath = $page->featured_image;
-                            $imageExists = $imagePath && file_exists(public_path($imagePath));
-                        @endphp
-                        
-                        @if($imageExists)
+                        @if($page->featured_image)
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Gambar Saat Ini</label>
                             <div class="border rounded-3 p-3 text-center bg-light">
-                                <img src="{{ asset($imagePath) }}" class="img-fluid rounded" style="max-height: 150px;">
+                                <img src="{{ asset($page->featured_image) }}"
+                                    class="img-fluid rounded"
+                                    style="max-height: 150px;">
+
                                 <div class="form-check mt-2">
-                                    <input type="checkbox" name="hapus_image" class="form-check-input" id="hapusImage" value="1">
-                                    <label class="form-check-label text-danger" for="hapusImage">Hapus gambar</label>
+                                    <input type="checkbox"
+                                        name="hapus_image"
+                                        class="form-check-input"
+                                        id="hapusImage"
+                                        value="1">
+
+                                    <label class="form-check-label text-danger"
+                                        for="hapusImage">
+                                        Hapus gambar
+                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -80,19 +86,31 @@
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Video (YouTube URL)</label>
                             @if($page->video)
-                                <div class="mb-2">
-                                    <div class="ratio ratio-16x9" style="max-width: 300px;">
-                                        <iframe src="{{ $page->embed_video }}" frameborder="0" allowfullscreen></iframe>
-                                    </div>
-                                    <div class="form-check mt-2">
-                                        <input type="checkbox" name="hapus_video" class="form-check-input" value="1">
-                                        <label class="form-check-label text-danger">Hapus video</label>
-                                    </div>
-                                </div>
+                            <div class="form-check mb-2">
+                                <input type="checkbox"
+                                    name="hapus_video"
+                                    class="form-check-input"
+                                    id="hapusVideo"
+                                    value="1">
+
+                                <label class="form-check-label text-danger"
+                                    for="hapusVideo">
+                                    Hapus video
+                                </label>
+                            </div>
                             @endif
-                            <input type="url" name="video" class="form-control" value="{{ $page->video }}" 
+
+                            <input type="url"
+                                name="video"
+                                class="form-control"
+                                value="{{ $page->video }}"
                                 placeholder="https://www.youtube.com/watch?v=...">
-                            <small class="text-muted">Masukkan URL YouTube, akan otomatis ditampilkan sebagai embed video</small>
+
+                            <div id="video-preview" class="mt-3"></div>
+
+                            <small class="text-muted">
+                                Masukkan URL YouTube, akan otomatis ditampilkan sebagai embed video
+                            </small>
                         </div>
 
                         <!-- Status -->
@@ -182,6 +200,44 @@
             container.style.display = 'none';
         }
     }
+
+        $(document).ready(function() {
+
+        // Preview video saat halaman dibuka
+        previewYoutube();
+
+        $('input[name="video"]').on('keyup change', function() {
+            previewYoutube();
+        });
+
+        function previewYoutube() {
+
+            let url = $('input[name="video"]').val();
+
+            let match = url.match(
+                /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/i
+            );
+
+            if(match){
+
+                $('#video-preview').html(`
+                    <div class="ratio ratio-16x9">
+                        <iframe
+                            src="https://www.youtube.com/embed/${match[1]}"
+                            frameborder="0"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                `);
+
+            } else {
+
+                $('#video-preview').html('');
+
+            }
+        }
+
+    });
 </script>
 @endpush
 @endsection

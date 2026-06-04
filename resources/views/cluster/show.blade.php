@@ -188,8 +188,8 @@
                         <div class="col-md-6 text-center">
                             <label class="text-muted small text-uppercase fw-semibold mb-2">Logo Cluster</label>
                             <div class="border rounded-3 p-3 bg-light">
-                                @if($cluster->logo_cluster && file_exists(public_path($cluster->logo_cluster)))
-                                    <img src="{{ asset($cluster->logo_cluster) }}" class="img-fluid rounded" style="max-height: 120px;">
+                                @if($cluster->logo_cluster)
+                                    <img src="{{ url($cluster->logo_cluster) }}">
                                 @else
                                     <i class="fas fa-building fa-4x text-muted"></i>
                                     <p class="text-muted mt-2 mb-0">Belum ada logo</p>
@@ -199,8 +199,8 @@
                         <div class="col-md-6 text-center">
                             <label class="text-muted small text-uppercase fw-semibold mb-2">Gambar Cluster</label>
                             <div class="border rounded-3 p-3 bg-light">
-                                @if($cluster->gambar_cluster && file_exists(public_path($cluster->gambar_cluster)))
-                                    <img src="{{ asset($cluster->gambar_cluster) }}" class="img-fluid rounded" style="max-height: 150px;">
+                                @if($cluster->gambar_cluster)
+                                    <img src="{{ url($cluster->gambar_cluster) }}">
                                 @else
                                     <i class="fas fa-image fa-4x text-muted"></i>
                                     <p class="text-muted mt-2 mb-0">Belum ada gambar utama</p>
@@ -226,7 +226,7 @@
                         <div class="row">
                             @foreach($fotoLainnya as $foto)
                                 <div class="col-md-3 mb-3">
-                                    <img src="{{ asset($foto) }}" class="img-fluid rounded border" style="height: 150px; width: 100%; object-fit: cover;">
+                                    <img src="{{ url($foto) }}" class="img-fluid rounded border" style="height: 150px; width: 100%; object-fit: cover;">
                                 </div>
                             @endforeach
                         </div>

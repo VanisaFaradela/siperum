@@ -6,6 +6,7 @@ use App\Models\Berita;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class BeritaController extends Controller
 {
@@ -88,36 +89,21 @@ class BeritaController extends Controller
                 $gambar->getClientOriginalName()
             );
 
-            // =========================
-            // PATH ADMIN
-            // =========================
-            $tujuanAdmin = public_path('uploads/berita');
+            $gambar = $request->file('gambar');
 
-            // =========================
-            // PATH FRONTEND
-            // =========================
-            $tujuanFrontend = 'C:/laragon/www/perumahan-web/public/uploads/berita';
-
-            // Buat folder jika belum ada
-            if (!file_exists($tujuanAdmin)) {
-                mkdir($tujuanAdmin, 0777, true);
-            }
-
-            if (!file_exists($tujuanFrontend)) {
-                mkdir($tujuanFrontend, 0777, true);
-            }
-
-            // Upload ke ADMIN
-            $gambar->move($tujuanAdmin, $namaGambar);
-
-            // Copy ke FRONTEND
-            copy(
-                $tujuanAdmin . '/' . $namaGambar,
-                $tujuanFrontend . '/' . $namaGambar
+            $namaGambar = time() . '_' . preg_replace(
+                '/[^a-zA-Z0-9._-]/',
+                '',
+                $gambar->getClientOriginalName()
             );
 
-            // Simpan ke database
-            $data['gambar'] = 'uploads/berita/' . $namaGambar;
+            Storage::disk('shared_uploads')->putFileAs(
+                'berita',
+                $gambar,
+                $namaGambar
+            );
+
+            $data['gambar'] = $namaGambar;
         }
 
         Berita::create($data);
@@ -188,29 +174,21 @@ class BeritaController extends Controller
 
         // HAPUS GAMBAR JIKA DICENTANG
         if ($request->has('hapus_gambar') && $request->hapus_gambar == 1) {
-            if ($berita->gambar && file_exists(public_path($berita->gambar))) {
-                unlink(public_path($berita->gambar));
+            
+            if ($berita->gambar) {
+                Storage::disk('shared_uploads')
+                    ->delete('berita/' . $berita->gambar);
             }
+
             $data['gambar'] = null;
         }
 
         // UPLOAD GAMBAR BARU
         if ($request->hasFile('gambar')) {
 
-            // =========================
-            // HAPUS GAMBAR LAMA ADMIN
-            // =========================
-            if ($berita->gambar && file_exists(public_path($berita->gambar))) {
-                unlink(public_path($berita->gambar));
-            }
-
-            // =========================
-            // HAPUS GAMBAR LAMA FRONTEND
-            // =========================
-            $gambarFrontendLama = 'C:/laragon/www/perumahan-web/public/' . $berita->gambar;
-
-            if ($berita->gambar && file_exists($gambarFrontendLama)) {
-                unlink($gambarFrontendLama);
+            if ($berita->gambar) {
+                Storage::disk('shared_uploads')
+                    ->delete('berita/' . $berita->gambar);
             }
 
             $gambar = $request->file('gambar');
@@ -221,36 +199,13 @@ class BeritaController extends Controller
                 $gambar->getClientOriginalName()
             );
 
-            // =========================
-            // PATH ADMIN
-            // =========================
-            $tujuanAdmin = public_path('uploads/berita');
-
-            // =========================
-            // PATH FRONTEND
-            // =========================
-            $tujuanFrontend = 'C:/laragon/www/perumahan-web/public/uploads/berita';
-
-            // Buat folder jika belum ada
-            if (!file_exists($tujuanAdmin)) {
-                mkdir($tujuanAdmin, 0777, true);
-            }
-
-            if (!file_exists($tujuanFrontend)) {
-                mkdir($tujuanFrontend, 0777, true);
-            }
-
-            // Upload ke ADMIN
-            $gambar->move($tujuanAdmin, $namaGambar);
-
-            // Copy ke FRONTEND
-            copy(
-                $tujuanAdmin . '/' . $namaGambar,
-                $tujuanFrontend . '/' . $namaGambar
+            Storage::disk('shared_uploads')->putFileAs(
+                'berita',
+                $gambar,
+                $namaGambar
             );
 
-            // Simpan ke database
-            $data['gambar'] = 'uploads/berita/' . $namaGambar;
+            $data['gambar'] = $namaGambar;
         }
 
         $berita->update($data);
@@ -268,17 +223,8 @@ class BeritaController extends Controller
         // Gunakan 'id' bukan 'id_berita'
         $berita = Berita::findOrFail($id);
 
-        // Hapus ADMIN
-        if ($berita->gambar && file_exists(public_path($berita->gambar))) {
-            unlink(public_path($berita->gambar));
-        }
-
-        // Hapus FRONTEND
-        $gambarFrontend = 'C:/laragon/www/perumahan-web/public/' . $berita->gambar;
-
-        if ($berita->gambar && file_exists($gambarFrontend)) {
-            unlink($gambarFrontend);
-        }
+        Storage::disk('shared_uploads')
+            ->delete('berita/' . $berita->gambar);
 
         $berita->delete();
 

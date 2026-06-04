@@ -97,20 +97,37 @@
                         </div>
 
                         <!-- Gambar Saat Ini -->
-                        @php
-                            $gambarPath = $berita->gambar;
-                            $gambarExists = $gambarPath && file_exists(public_path($gambarPath));
-                        @endphp
-                        
-                        @if($gambarExists)
+                        @if($berita->gambar)
                         <div class="mb-3">
-                            <label class="form-label fw-semibold">Gambar Saat Ini</label>
+                            <label class="form-label fw-semibold">
+                                Gambar Saat Ini
+                            </label>
+
                             <div class="border rounded-3 p-3 text-center bg-light">
-                                <img src="{{ asset($gambarPath) }}" class="img-fluid rounded" style="max-height: 150px;">
+
+                                <img
+                                    src="{{ route('media.berita', $berita->gambar) }}"
+                                    class="img-fluid rounded"
+                                    style="max-height:150px;"
+                                >
+
                                 <div class="form-check mt-2">
-                                    <input type="checkbox" name="hapus_gambar" class="form-check-input" id="hapusGambar" value="1">
-                                    <label class="form-check-label text-danger" for="hapusGambar">Hapus gambar</label>
+                                    <input
+                                        type="checkbox"
+                                        name="hapus_gambar"
+                                        class="form-check-input"
+                                        id="hapusGambar"
+                                        value="1"
+                                    >
+
+                                    <label
+                                        class="form-check-label text-danger"
+                                        for="hapusGambar"
+                                    >
+                                        Hapus gambar
+                                    </label>
                                 </div>
+
                             </div>
                         </div>
                         @endif

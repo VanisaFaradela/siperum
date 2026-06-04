@@ -18,13 +18,12 @@
 <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
     <!-- Gambar Header - PERBAIKAN DI SINI -->
     @php
-        $gambarPath = $berita->gambar;
-        $gambarExists = $gambarPath && file_exists(public_path($gambarPath));
+        $gambarExists = !empty($berita->gambar);
     @endphp
     
     @if($gambarExists)
         <div class="position-relative" style="height: 400px; overflow: hidden;">
-            <img src="{{ asset($gambarPath) }}" class="w-100 h-100" style="object-fit: cover;" alt="{{ $berita->judul }}">
+            <img src="{{ route('media.berita', $berita->gambar) }}" class="w-100 h-100" style="object-fit: cover;" alt="{{ $berita->judul }}">
             <div class="position-absolute bottom-0 start-0 w-100 p-4" style="background: linear-gradient(transparent, rgba(0,0,0,0.8));">
                 <span class="badge bg-success mb-2">{{ $berita->kategori }}</span>
                 <h2 class="text-white fw-bold mb-2">{{ $berita->judul }}</h2>
@@ -120,14 +119,13 @@
                     <h6 class="fw-bold mb-3"><i class="fas fa-newspaper me-2 text-success"></i>Berita Terkait</h6>
                     @foreach($beritaTerkait as $terkait)
                         @php
-                            $terkaitGambarPath = $terkait->gambar;
-                            $terkaitGambarExists = $terkaitGambarPath && file_exists(public_path($terkaitGambarPath));
+                            $terkaitGambarExists = !empty($terkait->gambar);
                         @endphp
                         <div class="mb-3 pb-3 {{ !$loop->last ? 'border-bottom' : '' }}">
                             <a href="{{ route('berita.show', $terkait->slug) }}" class="text-decoration-none">
                                 <div class="d-flex gap-3">
                                     @if($terkaitGambarExists)
-                                        <img src="{{ asset($terkaitGambarPath) }}" class="rounded" 
+                                        <img src="{{ route('media.berita', $terkait->gambar) }}" class="rounded" 
                                              style="width: 70px; height: 50px; object-fit: cover;">
                                     @else
                                         <div class="bg-light rounded d-flex align-items-center justify-content-center" 

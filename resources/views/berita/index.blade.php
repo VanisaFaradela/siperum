@@ -154,15 +154,14 @@
                 
                 <div class="col-md-4 text-md-end mt-3 mt-md-0">
                     <!-- Gambar jika ada - PERBAIKAN DI SINI -->
-                    @php
-                        $gambarPath = $item->gambar;
-                        $gambarExists = $gambarPath && file_exists(public_path($gambarPath));
-                    @endphp
-                    
-                    @if($gambarExists)
-                        <img src="{{ asset($gambarPath) }}" class="rounded" style="width: 80px; height: 60px; object-fit: cover;" alt="{{ $item->judul }}">
+                    @if($item->gambar)
+                        <img src="{{ route('media.berita', $item->gambar) }}"
+                            class="rounded"
+                            style="width: 80px; height: 60px; object-fit: cover;"
+                            alt="{{ $item->judul }}">
                     @else
-                        <div class="bg-light rounded d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 60px;">
+                        <div class="bg-light rounded d-inline-flex align-items-center justify-content-center"
+                            style="width: 80px; height: 60px;">
                             <i class="fas fa-newspaper text-muted"></i>
                         </div>
                     @endif

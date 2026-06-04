@@ -11,14 +11,31 @@ class PageController extends Controller
 {
     // ==================== BACKEND (CRUD) ====================
     
-    public function index()
+    public function index(Request $request)
     {
         if (!Auth::guard('admin')->check()) {
             return redirect()->route('login');
         }
-        
-        $pages = Page::orderBy('order')->orderBy('created_at', 'desc')->paginate(10);
-        return view('pages.index', compact('pages'));
+
+        $pages = Page::orderBy('order')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        $totalPages = Page::count();
+
+        $totalPublished = Page::where('status', 'published')->count();
+
+        $totalDraft = Page::where('status', 'draft')->count();
+
+        $totalVideo = Page::whereNotNull('video')->count();
+
+        return view('pages.index', compact(
+            'pages',
+            'totalPages',
+            'totalPublished',
+            'totalDraft',
+            'totalVideo'
+        ));
     }
 
     public function create()
@@ -68,29 +85,13 @@ class PageController extends Controller
                 $image->getClientOriginalName()
             );
 
-            // PATH ADMIN
-            $tujuanAdmin = public_path('uploads/pages');
+           $sharedPath = env('SHARED_UPLOADS_PATH') . '/pages';
 
-            // PATH FRONTEND
-            $tujuanFrontend = 'C:/laragon/www/perumahan-web/public/uploads/pages';
-
-            // Buat folder jika belum ada
-            if (!file_exists($tujuanAdmin)) {
-                mkdir($tujuanAdmin, 0777, true);
+            if (!file_exists($sharedPath)) {
+                mkdir($sharedPath, 0775, true);
             }
 
-            if (!file_exists($tujuanFrontend)) {
-                mkdir($tujuanFrontend, 0777, true);
-            }
-
-            // Upload ke ADMIN
-            $image->move($tujuanAdmin, $namaImage);
-
-            // Copy ke FRONTEND
-            copy(
-                $tujuanAdmin . '/' . $namaImage,
-                $tujuanFrontend . '/' . $namaImage
-            );
+            $image->move($sharedPath, $namaImage);
 
             $data['featured_image'] = 'uploads/pages/' . $namaImage;
         }
@@ -153,16 +154,14 @@ class PageController extends Controller
         // Upload gambar baru
         if ($request->hasFile('featured_image')) {
 
-            // Hapus gambar lama ADMIN
-            if ($page->featured_image && file_exists(public_path($page->featured_image))) {
-                unlink(public_path($page->featured_image));
-            }
+            $sharedPath = env('SHARED_UPLOADS_PATH');
 
-            // Hapus gambar lama FRONTEND
-            $gambarFrontendLama = 'C:/laragon/www/perumahan-web/public/' . $page->featured_image;
+            $fileLama =
+                $sharedPath . '/pages/' .
+                basename($page->featured_image);
 
-            if ($page->featured_image && file_exists($gambarFrontendLama)) {
-                unlink($gambarFrontendLama);
+            if (file_exists($fileLama)) {
+                unlink($fileLama);
             }
 
             $image = $request->file('featured_image');
@@ -173,49 +172,41 @@ class PageController extends Controller
                 $image->getClientOriginalName()
             );
 
-            // PATH ADMIN
-            $tujuanAdmin = public_path('uploads/pages');
+           $sharedPath = env('SHARED_UPLOADS_PATH') . '/pages';
 
-            // PATH FRONTEND
-            $tujuanFrontend = 'C:/laragon/www/perumahan-web/public/uploads/pages';
-
-            // Buat folder jika belum ada
-            if (!file_exists($tujuanAdmin)) {
-                mkdir($tujuanAdmin, 0777, true);
+            if (!file_exists($sharedPath)) {
+                mkdir($sharedPath, 0775, true);
             }
 
-            if (!file_exists($tujuanFrontend)) {
-                mkdir($tujuanFrontend, 0777, true);
-            }
-
-            // Upload ke ADMIN
-            $image->move($tujuanAdmin, $namaImage);
-
-            // Copy ke FRONTEND
-            copy(
-                $tujuanAdmin . '/' . $namaImage,
-                $tujuanFrontend . '/' . $namaImage
-            );
+            $image->move($sharedPath, $namaImage);
 
             $data['featured_image'] = 'uploads/pages/' . $namaImage;
         }
 
         // Hapus gambar jika dicentang
         if ($request->has('hapus_image') || $request->has('hapus_gambar')) {
-            if ($page->featured_image && file_exists(public_path($page->featured_image))) {
-                unlink(public_path($page->featured_image));
+
+            $sharedPath = env('SHARED_UPLOADS_PATH');
+
+            $fileLama =
+                $sharedPath . '/pages/' .
+                basename($page->featured_image);
+
+            if (file_exists($fileLama)) {
+                unlink($fileLama);
             }
+
             $data['featured_image'] = null;
         }
 
         // Hapus video jika dicentang
-        if ($request->has('hapus_video')) {
-            $data['video'] = null;
-        }
-
-        // Handle video baru
         if ($request->filled('video')) {
+
             $data['video'] = $request->video;
+
+        } elseif ($request->has('hapus_video')) {
+
+            $data['video'] = null;
         }
 
         // Simpan meta data SEO
@@ -240,15 +231,17 @@ class PageController extends Controller
         $page = Page::findOrFail($id);
         
         // Hapus gambar ADMIN
-        if ($page->featured_image && file_exists(public_path($page->featured_image))) {
-            unlink(public_path($page->featured_image));
-        }
+        if ($page->featured_image) {
 
-        // Hapus gambar FRONTEND
-        $gambarFrontend = 'C:/laragon/www/perumahan-web/public/' . $page->featured_image;
+            $sharedPath = env('SHARED_UPLOADS_PATH');
 
-        if ($page->featured_image && file_exists($gambarFrontend)) {
-            unlink($gambarFrontend);
+            $filePath =
+                $sharedPath . '/pages/' .
+                basename($page->featured_image);
+
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
         }
         
         $page->delete();

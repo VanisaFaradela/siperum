@@ -162,24 +162,17 @@ class ClusterController extends Controller
         // =========================
         // UPDATE LOGO
         // =========================
-        if ($request->hasFile('logo_cluster')) {
+       if ($request->hasFile('logo_cluster')) {
 
-            // hapus lama admin
+            // hapus logo lama
             if ($cluster->logo_cluster) {
 
-                $logoAdmin = public_path($cluster->logo_cluster);
-
-                if (file_exists($logoAdmin)) {
-                    unlink($logoAdmin);
-                }
-
-                // hapus lama frontend
-                $logoFrontend =
-                    'C:/laragon/www/perumahan-web/public/' .
+                $logoLama =
+                    env('SHARED_UPLOADS_PATH') . '/' .
                     $cluster->logo_cluster;
 
-                if (file_exists($logoFrontend)) {
-                    unlink($logoFrontend);
+                if (file_exists($logoLama)) {
+                    unlink($logoLama);
                 }
             }
 
@@ -192,33 +185,17 @@ class ClusterController extends Controller
                     $logo->getClientOriginalName()
                 );
 
-            // ADMIN
-            $tujuanAdmin = public_path('uploads/cluster/logo');
+            $tujuanShared =
+                env('SHARED_UPLOADS_PATH') . '/cluster/logo';
 
-            if (!file_exists($tujuanAdmin)) {
-                mkdir($tujuanAdmin, 0777, true);
+            if (!file_exists($tujuanShared)) {
+                mkdir($tujuanShared, 0775, true);
             }
 
-            copy(
-                $logo->getRealPath(),
-                $tujuanAdmin . '/' . $namaLogo
-            );
-
-            // FRONTEND
-            $tujuanFrontend =
-                self::FRONTEND_UPLOAD_PATH . 'logo';
-
-            if (!file_exists($tujuanFrontend)) {
-                mkdir($tujuanFrontend, 0777, true);
-            }
-
-            copy(
-                $logo->getRealPath(),
-                $tujuanFrontend . '/' . $namaLogo
-            );
+            $logo->move($tujuanShared, $namaLogo);
 
             $data['logo_cluster'] =
-                'uploads/cluster/logo/' . $namaLogo;
+                'cluster/logo/' . $namaLogo;
         }
 
         // =========================
@@ -228,19 +205,12 @@ class ClusterController extends Controller
 
             if ($cluster->gambar_cluster) {
 
-                $gambarAdmin =
-                    public_path($cluster->gambar_cluster);
-
-                if (file_exists($gambarAdmin)) {
-                    unlink($gambarAdmin);
-                }
-
-                $gambarFrontend =
-                    'C:/laragon/www/perumahan-web/public/' .
+                $gambarLama =
+                    env('SHARED_UPLOADS_PATH') . '/' .
                     $cluster->gambar_cluster;
 
-                if (file_exists($gambarFrontend)) {
-                    unlink($gambarFrontend);
+                if (file_exists($gambarLama)) {
+                    unlink($gambarLama);
                 }
             }
 
@@ -253,34 +223,17 @@ class ClusterController extends Controller
                     $gambar->getClientOriginalName()
                 );
 
-            // ADMIN
-            $tujuanAdmin =
-                public_path('uploads/cluster/gambar');
+            $tujuanShared =
+                env('SHARED_UPLOADS_PATH') . '/cluster/gambar';
 
-            if (!file_exists($tujuanAdmin)) {
-                mkdir($tujuanAdmin, 0777, true);
+            if (!file_exists($tujuanShared)) {
+                mkdir($tujuanShared, 0775, true);
             }
 
-            copy(
-                $gambar->getRealPath(),
-                $tujuanAdmin . '/' . $namaGambar
-            );
-
-            // FRONTEND
-            $tujuanFrontend =
-                self::FRONTEND_UPLOAD_PATH . 'gambar';
-
-            if (!file_exists($tujuanFrontend)) {
-                mkdir($tujuanFrontend, 0777, true);
-            }
-
-            copy(
-                $gambar->getRealPath(),
-                $tujuanFrontend . '/' . $namaGambar
-            );
+            $gambar->move($tujuanShared, $namaGambar);
 
             $data['gambar_cluster'] =
-                'uploads/cluster/gambar/' . $namaGambar;
+                'cluster/gambar/' . $namaGambar;
         }
 
         $cluster->update($data);
@@ -300,7 +253,7 @@ class ClusterController extends Controller
         
         $request->validate([
             'nama_cluster' => 'required|min:3|max:255',
-            'lokasi_cluster' => 'nullable|string',
+            'lokasi_cluster' => 'required|string',
             'kota' => 'required',
             'provinsi' => 'required',
             'nama_pengembang' => 'required',
@@ -353,31 +306,15 @@ class ClusterController extends Controller
             $namaLogo = time() . '_logo_' .
                 preg_replace('/[^a-zA-Z0-9._-]/', '', $logo->getClientOriginalName());
 
-            // ADMIN
-            $tujuanAdmin = public_path('uploads/cluster/logo');
+            $tujuanShared = '/home/u143856011/shared/uploads/cluster/logo';
 
-            if (!file_exists($tujuanAdmin)) {
-                mkdir($tujuanAdmin, 0777, true);
+            if (!file_exists($tujuanShared)) {
+                mkdir($tujuanShared, 0775, true);
             }
 
-            copy(
-                $logo->getRealPath(),
-                $tujuanAdmin . '/' . $namaLogo
-            );
+            $logo->move($tujuanShared, $namaLogo);
 
-            // FRONTEND
-            $tujuanFrontend = self::FRONTEND_UPLOAD_PATH . 'logo';
-
-            if (!file_exists($tujuanFrontend)) {
-                mkdir($tujuanFrontend, 0777, true);
-            }
-
-            copy(
-                $logo->getRealPath(),
-                $tujuanFrontend . '/' . $namaLogo
-            );
-
-            $data['logo_cluster'] = 'uploads/cluster/logo/' . $namaLogo;
+            $data['logo_cluster'] = 'cluster/logo/' . $namaLogo;
         }
 
         // =========================
@@ -390,31 +327,15 @@ class ClusterController extends Controller
             $namaFoto = time() . '_gambar_' .
                 preg_replace('/[^a-zA-Z0-9._-]/', '', $foto->getClientOriginalName());
 
-            // ADMIN
-            $tujuanAdmin = public_path('uploads/cluster/gambar');
+            $tujuanShared = '/home/u143856011/shared/uploads/cluster/gambar';
 
-            if (!file_exists($tujuanAdmin)) {
-                mkdir($tujuanAdmin, 0777, true);
+            if (!file_exists($tujuanShared)) {
+                mkdir($tujuanShared, 0775, true);
             }
 
-            copy(
-                $foto->getRealPath(),
-                $tujuanAdmin . '/' . $namaFoto
-            );
+            $foto->move($tujuanShared, $namaFoto);
 
-            // FRONTEND
-            $tujuanFrontend = self::FRONTEND_UPLOAD_PATH . 'gambar';
-
-            if (!file_exists($tujuanFrontend)) {
-                mkdir($tujuanFrontend, 0777, true);
-            }
-
-            copy(
-                $foto->getRealPath(),
-                $tujuanFrontend . '/' . $namaFoto
-            );
-
-            $data['gambar_cluster'] = 'uploads/cluster/gambar/' . $namaFoto;
+            $data['gambar_cluster'] = 'cluster/gambar/' . $namaFoto;
         }
 
         // =========================
@@ -427,33 +348,21 @@ class ClusterController extends Controller
             foreach ($request->file('foto_lainnya') as $file) {
 
                 $namaFile = time() . '_' . uniqid() . '_' .
-                    preg_replace('/[^a-zA-Z0-9._-]/', '', $file->getClientOriginalName());
+                    preg_replace(
+                        '/[^a-zA-Z0-9._-]/',
+                        '',
+                        $file->getClientOriginalName()
+                    );
 
-                // ADMIN
-                $tujuanAdmin = public_path('uploads/cluster/foto');
+                $tujuanShared = '/home/u143856011/shared/uploads/cluster/foto';
 
-                if (!file_exists($tujuanAdmin)) {
-                    mkdir($tujuanAdmin, 0777, true);
+                if (!file_exists($tujuanShared)) {
+                    mkdir($tujuanShared, 0775, true);
                 }
 
-                copy(
-                    $file->getRealPath(),
-                    $tujuanAdmin . '/' . $namaFile
-                );
+                $file->move($tujuanShared, $namaFile);
 
-                // FRONTEND
-                $tujuanFrontend = self::FRONTEND_UPLOAD_PATH . 'foto';
-
-                if (!file_exists($tujuanFrontend)) {
-                    mkdir($tujuanFrontend, 0777, true);
-                }
-
-                copy(
-                    $file->getRealPath(),
-                    $tujuanFrontend . '/' . $namaFile
-                );
-
-                $fotoBaru[] = 'uploads/cluster/foto/' . $namaFile;
+                $fotoBaru[] = 'cluster/foto/' . $namaFile;
             }
 
             $data['foto_lainnya'] = json_encode($fotoBaru);
@@ -520,54 +429,30 @@ class ClusterController extends Controller
         if (!Auth::guard('admin')->check()) {
             return redirect()->route('login');
         }
-        
+
         $cluster = Cluster::where('cluster_id', $id)->firstOrFail();
 
-        // =========================
-        // HAPUS LOGO
-        // =========================
+        // Hapus logo
         if ($cluster->logo_cluster) {
 
-            // ADMIN
-            $logoAdmin = public_path($cluster->logo_cluster);
+            $logoPath = '/home/u143856011/shared/' . $cluster->logo_cluster;
 
-            if (file_exists($logoAdmin)) {
-                unlink($logoAdmin);
-            }
-
-            // FRONTEND
-            $logoFrontend =
-                'C:/laragon/www/perumahan-web/public/' . $cluster->logo_cluster;
-
-            if (file_exists($logoFrontend)) {
-                unlink($logoFrontend);
+            if (file_exists($logoPath)) {
+                unlink($logoPath);
             }
         }
 
-        // =========================
-        // HAPUS GAMBAR
-        // =========================
+        // Hapus gambar utama
         if ($cluster->gambar_cluster) {
 
-            // ADMIN
-            $gambarAdmin = public_path($cluster->gambar_cluster);
+            $gambarPath = '/home/u143856011/shared/' . $cluster->gambar_cluster;
 
-            if (file_exists($gambarAdmin)) {
-                unlink($gambarAdmin);
-            }
-
-            // FRONTEND
-            $gambarFrontend =
-                'C:/laragon/www/perumahan-web/public/' . $cluster->gambar_cluster;
-
-            if (file_exists($gambarFrontend)) {
-                unlink($gambarFrontend);
+            if (file_exists($gambarPath)) {
+                unlink($gambarPath);
             }
         }
 
-        // =========================
-        // HAPUS FOTO LAINNYA
-        // =========================
+        // Hapus foto lainnya
         if ($cluster->foto_lainnya) {
 
             $fotoLainnya = is_string($cluster->foto_lainnya)
@@ -578,22 +463,10 @@ class ClusterController extends Controller
 
                 foreach ($fotoLainnya as $foto) {
 
-                    if ($foto) {
+                    $fotoPath = '/home/u143856011/shared/' . $foto;
 
-                        // ADMIN
-                        $fotoAdmin = public_path($foto);
-
-                        if (file_exists($fotoAdmin)) {
-                            unlink($fotoAdmin);
-                        }
-
-                        // FRONTEND
-                        $fotoFrontend =
-                            'C:/laragon/www/perumahan-web/public/' . $foto;
-
-                        if (file_exists($fotoFrontend)) {
-                            unlink($fotoFrontend);
-                        }
+                    if (file_exists($fotoPath)) {
+                        unlink($fotoPath);
                     }
                 }
             }
