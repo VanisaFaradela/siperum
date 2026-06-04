@@ -9,6 +9,26 @@ use Illuminate\Support\Str;
 
 class PageController extends Controller
 {
+    private function sharedPagesPath(): string
+    {
+        return '/home/u143856011/shared/uploads/pages';
+    }
+
+    private function sharedImagePath(?string $value): ?string
+    {
+        if (empty($value)) {
+            return null;
+        }
+
+        $file = basename($value);
+
+        if ($file === '' || $file === '.' || $file === '..') {
+            return null;
+        }
+
+        return $this->sharedPagesPath() . '/' . $file;
+    }
+
     // ==================== BACKEND (CRUD) ====================
     
     public function index(Request $request)
@@ -85,7 +105,7 @@ class PageController extends Controller
                 $image->getClientOriginalName()
             );
 
-           $sharedPath = '/home/u143856011/shared/uploads/pages';
+            $sharedPath = $this->sharedPagesPath();
 
             if (!file_exists($sharedPath)) {
                 mkdir($sharedPath, 0775, true);
@@ -154,13 +174,9 @@ class PageController extends Controller
         // Upload gambar baru
         if ($request->hasFile('featured_image')) {
 
-            $sharedPath = '/home/u143856011/shared/uploads/pages';
+            $fileLama = $this->sharedImagePath($page->featured_image);
 
-            $fileLama =
-                $sharedPath . '/' .
-                basename($page->featured_image);
-
-            if (file_exists($fileLama)) {
+            if ($fileLama && file_exists($fileLama) && is_file($fileLama)) {
                 unlink($fileLama);
             }
 
@@ -172,7 +188,7 @@ class PageController extends Controller
                 $image->getClientOriginalName()
             );
 
-           $sharedPath = '/home/u143856011/shared/uploads/pages';
+            $sharedPath = $this->sharedPagesPath();
 
             if (!file_exists($sharedPath)) {
                 mkdir($sharedPath, 0775, true);
@@ -186,13 +202,9 @@ class PageController extends Controller
         // Hapus gambar jika dicentang
         if ($request->has('hapus_image') || $request->has('hapus_gambar')) {
 
-            $sharedPath = '/home/u143856011/shared/uploads/pages';
+            $fileLama = $this->sharedImagePath($page->featured_image);
 
-            $fileLama =
-                $sharedPath . '/' .
-                basename($page->featured_image);
-
-            if (file_exists($fileLama)) {
+            if ($fileLama && file_exists($fileLama) && is_file($fileLama)) {
                 unlink($fileLama);
             }
 
@@ -233,13 +245,9 @@ class PageController extends Controller
         // Hapus gambar ADMIN
         if ($page->featured_image) {
 
-            $sharedPath = '/home/u143856011/shared/uploads/pages';
+            $filePath = $this->sharedImagePath($page->featured_image);
 
-            $filePath =
-                $sharedPath . '/' .
-                basename($page->featured_image);
-
-            if (file_exists($filePath)) {
+            if ($filePath && file_exists($filePath) && is_file($filePath)) {
                 unlink($filePath);
             }
         }

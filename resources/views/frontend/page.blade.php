@@ -8,7 +8,7 @@
         <div class="col-md-8 mx-auto">
             <div class="text-center mb-5">
                 @if($page->featured_image)
-                    <img src="{{ asset($page->featured_image) }}" class="img-fluid rounded mb-4" alt="{{ $page->title }}">
+                    <img src="{{ route('media.pages', ['file' => basename($page->featured_image)]) }}" class="img-fluid rounded mb-4" alt="{{ $page->title }}">
                 @endif
                 <h1 class="fw-bold mb-3">{{ $page->title }}</h1>
             </div>
