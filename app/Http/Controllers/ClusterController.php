@@ -10,8 +10,8 @@ use Illuminate\Support\Str;
 
 class ClusterController extends Controller
 {
-    // PATH FRONTEND
-    private const FRONTEND_UPLOAD_PATH = 'C:/laragon/www/perumahan-web/public/uploads/cluster/';
+    // PATH SHARED UPLOADS
+    private const SHARED_UPLOADS_PATH = '/home/u143856011/shared/uploads/cluster';
 
     /**
      * Display a listing of the resource.
@@ -169,7 +169,7 @@ class ClusterController extends Controller
             if ($cluster->logo) {
 
                 $logoLama =
-                    env('SHARED_UPLOADS_PATH') . '/' .
+                    self::SHARED_UPLOADS_PATH . '/' .
                     $cluster->logo;
 
                 if (file_exists($logoLama)) {
@@ -187,7 +187,7 @@ class ClusterController extends Controller
                 );
 
             $tujuanShared =
-                env('SHARED_UPLOADS_PATH') . '/cluster/logo';
+                self::SHARED_UPLOADS_PATH . '/logo';
 
             if (!file_exists($tujuanShared)) {
                 mkdir($tujuanShared, 0775, true);
@@ -207,7 +207,7 @@ class ClusterController extends Controller
             if ($cluster->foto_utama) {
 
                 $gambarLama =
-                    env('SHARED_UPLOADS_PATH') . '/' .
+                    self::SHARED_UPLOADS_PATH . '/' .
                     $cluster->foto_utama;
 
                 if (file_exists($gambarLama)) {
@@ -225,7 +225,7 @@ class ClusterController extends Controller
                 );
 
             $tujuanShared =
-                env('SHARED_UPLOADS_PATH') . '/cluster/gambar';
+                self::SHARED_UPLOADS_PATH . '/gambar';
 
             if (!file_exists($tujuanShared)) {
                 mkdir($tujuanShared, 0775, true);
@@ -308,7 +308,7 @@ class ClusterController extends Controller
             $namaLogo = time() . '_logo_' .
                 preg_replace('/[^a-zA-Z0-9._-]/', '', $logo->getClientOriginalName());
 
-            $tujuanShared = env('SHARED_UPLOADS_PATH') . '/cluster/logo';
+            $tujuanShared = self::SHARED_UPLOADS_PATH . '/logo';
 
             if (!file_exists($tujuanShared)) {
                 mkdir($tujuanShared, 0775, true);
@@ -329,7 +329,7 @@ class ClusterController extends Controller
             $namaFoto = time() . '_gambar_' .
                 preg_replace('/[^a-zA-Z0-9._-]/', '', $foto->getClientOriginalName());
 
-            $tujuanShared = env('SHARED_UPLOADS_PATH') . '/cluster/gambar';
+            $tujuanShared = self::SHARED_UPLOADS_PATH . '/gambar';
 
             if (!file_exists($tujuanShared)) {
                 mkdir($tujuanShared, 0775, true);
@@ -356,7 +356,7 @@ class ClusterController extends Controller
                         $file->getClientOriginalName()
                     );
 
-                $tujuanShared = env('SHARED_UPLOADS_PATH') . '/cluster/foto';
+                $tujuanShared = self::SHARED_UPLOADS_PATH . '/foto';
 
                 if (!file_exists($tujuanShared)) {
                     mkdir($tujuanShared, 0775, true);
@@ -437,7 +437,7 @@ class ClusterController extends Controller
         // Hapus logo
         if ($cluster->logo) {
 
-            $logoPath = env('SHARED_UPLOADS_PATH') . '/' . $cluster->logo;
+            $logoPath = self::SHARED_UPLOADS_PATH . '/' . $cluster->logo;
 
             if (file_exists($logoPath)) {
                 unlink($logoPath);
@@ -447,7 +447,7 @@ class ClusterController extends Controller
         // Hapus gambar utama
         if ($cluster->foto_utama) {
 
-            $gambarPath = env('SHARED_UPLOADS_PATH') . '/' . $cluster->foto_utama;
+            $gambarPath = self::SHARED_UPLOADS_PATH . '/' . $cluster->foto_utama;
 
             if (file_exists($gambarPath)) {
                 unlink($gambarPath);
@@ -465,7 +465,7 @@ class ClusterController extends Controller
 
                 foreach ($fotoLainnya as $foto) {
 
-                    $fotoPath = env('SHARED_UPLOADS_PATH') . '/' . $foto;
+                    $fotoPath = self::SHARED_UPLOADS_PATH . '/' . $foto;
 
                     if (file_exists($fotoPath)) {
                         unlink($fotoPath);
