@@ -145,11 +145,13 @@
                     <td class="text-center">{{ $pages->firstItem() + $index }}</td>
                     <td>
                         @if($item->featured_image)
-                            <img src="{{ url($item->featured_image) }}" class="rounded" 
-                                 style="width: 50px; height: 45px; object-fit: cover;" alt="Gambar">
+                            <img src="{{ route('media.pages', basename($item->featured_image)) }}"
+                                class="rounded"
+                                style="width:50px;height:45px;object-fit:cover;"
+                                alt="Gambar">
                         @else
-                            <div class="bg-light rounded d-flex align-items-center justify-content-center" 
-                                 style="width: 50px; height: 45px;">
+                            <div class="bg-light rounded d-flex align-items-center justify-content-center"
+                                style="width:50px;height:45px;">
                                 <i class="fas fa-image text-muted"></i>
                             </div>
                         @endif
