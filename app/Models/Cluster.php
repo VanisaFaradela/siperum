@@ -11,12 +11,12 @@ class Cluster extends Model
     use HasFactory;
 
     protected $table = 'cluster';
-    protected $primaryKey = 'cluster_id';  // Kunci utama adalah cluster_id
+    protected $primaryKey = 'id_cluster';  // Kunci utama adalah id_cluster
     
     protected $fillable = [
         'nama_cluster',
         'slug',
-        'Alamat',
+        'alamat',
         'kota',
         'provinsi',
         'kode_pos',
@@ -24,10 +24,10 @@ class Cluster extends Model
         'total_unit',
         'unit_terjual',
         'unit_tersedia',
-        'deskripsi_cluster',
+        'deskripsi',
         'fasilitas',
-        'logo_cluster',
-        'gambar_cluster',
+        'logo',
+        'foto_utama',
         'foto_lainnya',
         'latitude',
         'longitude',
@@ -62,6 +62,6 @@ class Cluster extends Model
 
     public function tipeRumah()
     {
-        return $this->hasMany(TipeRumah::class, 'cluster_id', 'cluster_id');
+        return $this->hasMany(TipeRumah::class, 'cluster_id', 'id_cluster');
     }
 }

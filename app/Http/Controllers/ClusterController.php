@@ -29,7 +29,7 @@ class ClusterController extends Controller
         $clusters = Cluster::with('tipeRumah')
             ->when($search, function ($query, $search) {
                 return $query->where('nama_cluster', 'like', "%{$search}%")
-                             ->orWhere('Alamat', 'like', "%{$search}%")
+                             ->orWhere('alamat', 'like', "%{$search}%")
                              ->orWhere('kota', 'like', "%{$search}%");
             })
             ->when($kota, function ($query, $kota) {
@@ -94,7 +94,7 @@ class ClusterController extends Controller
             return redirect()->route('login');
         }
         
-        $cluster = Cluster::where('cluster_id', $id)->firstOrFail();
+        $cluster = Cluster::where('id_cluster', $id)->firstOrFail();
         
         if ($cluster->fasilitas && is_string($cluster->fasilitas)) {
             $cluster->fasilitas = json_decode($cluster->fasilitas, true);
@@ -130,23 +130,24 @@ class ClusterController extends Controller
             return redirect()->route('login');
         }
 
-        $cluster = Cluster::where('cluster_id', $id)->firstOrFail();
+        $cluster = Cluster::where('id_cluster', $id)->firstOrFail();
 
         $request->validate([
             'nama_cluster' => 'required|min:3|max:255',
-            'Alamat' => 'nullable|string',
+            'alamat' => 'required|string',
             'kota' => 'required',
             'provinsi' => 'required',
             'nama_pengembang' => 'required',
             'kontak_pengembang' => 'required',
             'total_unit' => 'required|integer|min:0',
             'unit_tersedia' => 'required|integer|min:0',
-            'logo_cluster' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'gambar_cluster' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
         ]);
 
         $data = $request->all();
 
+        $data['deskripsi'] = $request->input('deskripsi_cluster', $request->input('deskripsi'));
         $data['unit_terjual'] =
             $data['total_unit'] - $data['unit_tersedia'];
 
@@ -162,21 +163,21 @@ class ClusterController extends Controller
         // =========================
         // UPDATE LOGO
         // =========================
-       if ($request->hasFile('logo_cluster')) {
+       if ($request->hasFile('logo')) {
 
             // hapus logo lama
-            if ($cluster->logo_cluster) {
+            if ($cluster->logo) {
 
                 $logoLama =
                     env('SHARED_UPLOADS_PATH') . '/' .
-                    $cluster->logo_cluster;
+                    $cluster->logo;
 
                 if (file_exists($logoLama)) {
                     unlink($logoLama);
                 }
             }
 
-            $logo = $request->file('logo_cluster');
+            $logo = $request->file('logo');
 
             $namaLogo = time() . '_logo_' .
                 preg_replace(
@@ -194,7 +195,7 @@ class ClusterController extends Controller
 
             $logo->move($tujuanShared, $namaLogo);
 
-            $data['logo_cluster'] =
+            $data['logo'] =
                 'cluster/logo/' . $namaLogo;
         }
 
@@ -203,11 +204,11 @@ class ClusterController extends Controller
         // =========================
         if ($request->hasFile('gambar_cluster')) {
 
-            if ($cluster->gambar_cluster) {
+            if ($cluster->foto_utama) {
 
                 $gambarLama =
                     env('SHARED_UPLOADS_PATH') . '/' .
-                    $cluster->gambar_cluster;
+                    $cluster->foto_utama;
 
                 if (file_exists($gambarLama)) {
                     unlink($gambarLama);
@@ -232,7 +233,7 @@ class ClusterController extends Controller
 
             $gambar->move($tujuanShared, $namaGambar);
 
-            $data['gambar_cluster'] =
+            $data['foto_utama'] =
                 'cluster/gambar/' . $namaGambar;
         }
 
@@ -253,7 +254,7 @@ class ClusterController extends Controller
         
         $request->validate([
             'nama_cluster' => 'required|min:3|max:255',
-            'Alamat' => 'required|string',
+            'alamat' => 'required|string',
             'kota' => 'required',
             'provinsi' => 'required',
             'nama_pengembang' => 'required',
@@ -266,6 +267,7 @@ class ClusterController extends Controller
 
         $data = $request->all();
         
+        $data['deskripsi'] = $request->input('deskripsi_cluster', $request->input('deskripsi'));
         $data['unit_terjual'] = $data['total_unit'] - $data['unit_tersedia'];
         $data['slug'] = Str::slug($data['nama_cluster']);
         
@@ -306,7 +308,7 @@ class ClusterController extends Controller
             $namaLogo = time() . '_logo_' .
                 preg_replace('/[^a-zA-Z0-9._-]/', '', $logo->getClientOriginalName());
 
-            $tujuanShared = '/home/u143856011/shared/uploads/cluster/logo';
+            $tujuanShared = env('SHARED_UPLOADS_PATH') . '/cluster/logo';
 
             if (!file_exists($tujuanShared)) {
                 mkdir($tujuanShared, 0775, true);
@@ -314,7 +316,7 @@ class ClusterController extends Controller
 
             $logo->move($tujuanShared, $namaLogo);
 
-            $data['logo_cluster'] = 'cluster/logo/' . $namaLogo;
+            $data['logo'] = 'cluster/logo/' . $namaLogo;
         }
 
         // =========================
@@ -327,7 +329,7 @@ class ClusterController extends Controller
             $namaFoto = time() . '_gambar_' .
                 preg_replace('/[^a-zA-Z0-9._-]/', '', $foto->getClientOriginalName());
 
-            $tujuanShared = '/home/u143856011/shared/uploads/cluster/gambar';
+            $tujuanShared = env('SHARED_UPLOADS_PATH') . '/cluster/gambar';
 
             if (!file_exists($tujuanShared)) {
                 mkdir($tujuanShared, 0775, true);
@@ -335,7 +337,7 @@ class ClusterController extends Controller
 
             $foto->move($tujuanShared, $namaFoto);
 
-            $data['gambar_cluster'] = 'cluster/gambar/' . $namaFoto;
+            $data['foto_utama'] = 'cluster/gambar/' . $namaFoto;
         }
 
         // =========================
@@ -354,7 +356,7 @@ class ClusterController extends Controller
                         $file->getClientOriginalName()
                     );
 
-                $tujuanShared = '/home/u143856011/shared/uploads/cluster/foto';
+                $tujuanShared = env('SHARED_UPLOADS_PATH') . '/cluster/foto';
 
                 if (!file_exists($tujuanShared)) {
                     mkdir($tujuanShared, 0775, true);
@@ -379,7 +381,7 @@ class ClusterController extends Controller
      */
     public function show($id)
     {
-        $cluster = Cluster::where('cluster_id', $id)
+        $cluster = Cluster::where('id_cluster', $id)
             ->orWhere('slug', $id)
             ->firstOrFail();
         
@@ -413,7 +415,7 @@ class ClusterController extends Controller
             : 0;
         
         $clusterTerkait = Cluster::where('kota', $cluster->kota)
-            ->where('cluster_id', '!=', $cluster->cluster_id)
+            ->where('id_cluster', '!=', $cluster->id_cluster)
             ->where('status', 'aktif')
             ->limit(4)
             ->get();
@@ -430,12 +432,12 @@ class ClusterController extends Controller
             return redirect()->route('login');
         }
 
-        $cluster = Cluster::where('cluster_id', $id)->firstOrFail();
+        $cluster = Cluster::where('id_cluster', $id)->firstOrFail();
 
         // Hapus logo
-        if ($cluster->logo_cluster) {
+        if ($cluster->logo) {
 
-            $logoPath = '/home/u143856011/shared/' . $cluster->logo_cluster;
+            $logoPath = env('SHARED_UPLOADS_PATH') . '/' . $cluster->logo;
 
             if (file_exists($logoPath)) {
                 unlink($logoPath);
@@ -443,9 +445,9 @@ class ClusterController extends Controller
         }
 
         // Hapus gambar utama
-        if ($cluster->gambar_cluster) {
+        if ($cluster->foto_utama) {
 
-            $gambarPath = '/home/u143856011/shared/' . $cluster->gambar_cluster;
+            $gambarPath = env('SHARED_UPLOADS_PATH') . '/' . $cluster->foto_utama;
 
             if (file_exists($gambarPath)) {
                 unlink($gambarPath);
@@ -463,7 +465,7 @@ class ClusterController extends Controller
 
                 foreach ($fotoLainnya as $foto) {
 
-                    $fotoPath = '/home/u143856011/shared/' . $foto;
+                    $fotoPath = env('SHARED_UPLOADS_PATH') . '/' . $foto;
 
                     if (file_exists($fotoPath)) {
                         unlink($fotoPath);

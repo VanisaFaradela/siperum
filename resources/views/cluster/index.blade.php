@@ -145,8 +145,8 @@
                 <tr>
                     <td class="text-center">{{ $clusters->firstItem() + $index }}</td>
                     <td>
-                        @if($item->logo_cluster)
-                            <img src="{{ url($item->logo_cluster) }}" class="rounded-circle" 
+                        @if($item->logo)
+                            <img src="{{ url($item->logo) }}" class="rounded-circle" 
                                  style="width: 50px; height: 50px; object-fit: cover;" alt="Logo">
                         @else
                             <div class="bg-light rounded-circle d-flex align-items-center justify-content-center" 
@@ -161,7 +161,7 @@
                         </a>
                         <br>
                         <small class="text-muted">
-                            <i class="fas fa-map-marker-alt me-1"></i>{{ Str::limit($item->Alamat, 50) }}
+                            <i class="fas fa-map-marker-alt me-1"></i>{{ Str::limit($item->alamat, 50) }}
                         </small>
                     </td>
                     <td>{{ $item->kota }}</td>
@@ -200,15 +200,15 @@
                                data-bs-toggle="tooltip" title="Lihat Detail">
                                 <i class="fas fa-eye"></i>
                             </a>
-                            <a href="{{ route('cluster.edit', $item->cluster_id) }}" class="btn btn-sm btn-outline-warning"
+                            <a href="{{ route('cluster.edit', $item->id_cluster) }}" class="btn btn-sm btn-outline-warning"
                                data-bs-toggle="tooltip" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <button onclick="confirmDelete({{ $item->cluster_id }})" class="btn btn-sm btn-outline-danger"
+                            <button onclick="confirmDelete({{ $item->id_cluster }})" class="btn btn-sm btn-outline-danger"
                                     data-bs-toggle="tooltip" title="Hapus">
                                 <i class="fas fa-trash"></i>
                             </button>
-                            <form id="delete-form-{{ $item->cluster_id }}" action="{{ route('cluster.destroy', $item->cluster_id) }}" 
+                            <form id="delete-form-{{ $item->id_cluster }}" action="{{ route('cluster.destroy', $item->id_cluster) }}" 
                                   method="POST" class="d-none">
                                 @csrf
                                 @method('DELETE')

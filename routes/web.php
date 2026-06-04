@@ -39,6 +39,15 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 // CRUD CLUSTER - MENGGUNAKAN PARAMETER {cluster} (Route Model Binding)
 // ============================================
 Route::resource('cluster', ClusterController::class);
+Route::get('/media/cluster/{file}', function ($file) {
+
+    $path = '/home/u143856011/shared/uploads/cluster/' . $file;
+
+    abort_unless(file_exists($path), 404);
+
+    return response()->file($path);
+
+})->where('file', '.*')->name('media.cluster');
 
 // ============================================
 // CRUD TIPE RUMAH
@@ -49,7 +58,6 @@ Route::resource('tipe-rumah', TipeRumahController::class);
 // CRUD BERITA
 // ============================================
 Route::resource('berita', BeritaController::class);
-
 Route::get('/media/berita/{file}', function ($file) {
 
     $path = '/home/u143856011/shared/uploads/berita/' . $file;
@@ -102,6 +110,15 @@ Route::put('/pengaturan/password', [PengaturanController::class, 'updatePassword
 // ============================================
 Route::resource('pages', PageController::class);
 Route::post('/pages/update-order', [PageController::class, 'updateOrder'])->name('pages.update-order');
+Route::get('/media/pages/{file}', function ($file) {
+
+    $path = '/home/u143856011/shared/uploads/pages/' . $file;
+
+    abort_unless(file_exists($path), 404);
+
+    return response()->file($path);
+
+})->where('file', '.*')->name('media.pages');
 
 // ============================================
 // PENGATURAN WEBSITE

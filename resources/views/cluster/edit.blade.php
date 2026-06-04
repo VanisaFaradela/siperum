@@ -16,7 +16,7 @@
 
     <div class="card border-0 shadow-sm rounded-4">
         <div class="card-body p-4">
-            <form method="POST" action="{{ route('cluster.update', $cluster->cluster_id) }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('cluster.update', $cluster->id_cluster) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 
@@ -59,10 +59,10 @@
                             </div>
                             
                             <div class="col-md-12 mb-3">
-                                <label class="form-label fw-semibold">Lokasi Cluster <span class="text-danger">*</span></label>
-                                <textarea name="Alamat" class="form-control @error('Alamat') is-invalid @enderror" 
-                                          rows="2" placeholder="Jl. Contoh No. 123" required>{{ old('Alamat', $cluster->Alamat) }}</textarea>
-                                @error('Alamat')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                <label class="form-label fw-semibold">Alamat Cluster <span class="text-danger">*</span></label>
+                                <textarea name="alamat" class="form-control @error('alamat') is-invalid @enderror" 
+                                          rows="2" placeholder="Jl. Contoh No. 123" required>{{ old('alamat', $cluster->alamat) }}</textarea>
+                                @error('alamat')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                             
                             <div class="col-md-4 mb-3">
@@ -178,7 +178,7 @@
                             <div class="col-md-12 mb-3">
                                 <label class="form-label fw-semibold">Deskripsi Cluster</label>
                                 <textarea name="deskripsi_cluster" class="form-control @error('deskripsi_cluster') is-invalid @enderror" 
-                                          rows="4" placeholder="Deskripsikan cluster ini...">{{ old('deskripsi_cluster', $cluster->deskripsi_cluster) }}</textarea>
+                                          rows="4" placeholder="Deskripsikan cluster ini...">{{ old('deskripsi_cluster', $cluster->deskripsi) }}</textarea>
                                 @error('deskripsi_cluster')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                             
@@ -249,9 +249,9 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold">Logo Cluster</label>
-                                @if($cluster->logo_cluster)
+                                @if($cluster->logo)
                                     <div class="mb-2">
-                                        <img src="{{ url($cluster->logo_cluster) }}" class="img-fluid rounded border p-1" style="max-height: 80px;">
+                                        <img src="{{ url($cluster->logo) }}" class="img-fluid rounded border p-1" style="max-height: 80px;">
                                         <div class="form-check mt-2">
                                             <input type="checkbox" name="hapus_logo" class="form-check-input" id="hapus_logo" value="1">
                                             <label class="form-check-label text-danger" for="hapus_logo">Hapus logo</label>
@@ -269,9 +269,9 @@
                             
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold">Gambar Cluster</label>
-                                @if($cluster->gambar_cluster)
+                                @if($cluster->foto_utama)
                                     <div class="mb-2">
-                                        <img src="{{ url($cluster->gambar_cluster) }}" class="img-fluid rounded border p-1" style="max-height: 80px;">
+                                        <img src="{{ url($cluster->foto_utama) }}" class="img-fluid rounded border p-1" style="max-height: 80px;">
                                         <div class="form-check mt-2">
                                             <input type="checkbox" name="hapus_gambar" class="form-check-input" id="hapus_gambar" value="1">
                                             <label class="form-check-label text-danger" for="hapus_gambar">Hapus gambar utama</label>

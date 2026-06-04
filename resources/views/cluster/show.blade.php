@@ -13,12 +13,12 @@
             </h4>
             <p class="text-muted small">
                 <i class="fas fa-map-marker-alt me-1"></i>
-                {{ $cluster->Alamat }}, {{ $cluster->kota }}, {{ $cluster->provinsi }}
+                {{ $cluster->alamat }}, {{ $cluster->kota }}, {{ $cluster->provinsi }}
             </p>
         </div>
         <div>
-            {{-- PERBAIKAN: gunakan cluster_id, bukan id --}}
-            <a href="{{ route('cluster.edit', $cluster->cluster_id) }}" class="btn btn-warning btn-sm me-2">
+            {{-- PERBAIKAN: gunakan id_cluster, bukan cluster_id --}}
+            <a href="{{ route('cluster.edit', $cluster->id_cluster) }}" class="btn btn-warning btn-sm me-2">
                 <i class="fas fa-edit me-1"></i>Edit
             </a>
             <a href="{{ route('cluster.index') }}" class="btn btn-outline-secondary btn-sm">
@@ -59,7 +59,7 @@
                             </div>
                             <div class="mb-3">
                                 <label class="text-muted small text-uppercase fw-semibold">Lokasi Cluster</label>
-                                <p class="mb-0">{{ $cluster->Alamat }}</p>
+                                <p class="mb-0">{{ $cluster->alamat }}</p>
                             </div>
                             <div class="mb-3">
                                 <label class="text-muted small text-uppercase fw-semibold">Kota</label>
@@ -156,7 +156,7 @@
                     <!-- Deskripsi Cluster -->
                     <div class="mt-2">
                         <label class="text-muted small text-uppercase fw-semibold">Deskripsi Cluster</label>
-                        <p class="mb-0">{{ $cluster->deskripsi_cluster ?: 'Belum ada deskripsi.' }}</p>
+                        <p class="mb-0">{{ $cluster->deskripsi ?: 'Belum ada deskripsi.' }}</p>
                     </div>
 
                     <!-- Fasilitas -->
@@ -188,8 +188,8 @@
                         <div class="col-md-6 text-center">
                             <label class="text-muted small text-uppercase fw-semibold mb-2">Logo Cluster</label>
                             <div class="border rounded-3 p-3 bg-light">
-                                @if($cluster->logo_cluster)
-                                    <img src="{{ url($cluster->logo_cluster) }}">
+                                @if($cluster->logo)
+                                    <img src="{{ url($cluster->logo) }}">
                                 @else
                                     <i class="fas fa-building fa-4x text-muted"></i>
                                     <p class="text-muted mt-2 mb-0">Belum ada logo</p>
@@ -199,8 +199,8 @@
                         <div class="col-md-6 text-center">
                             <label class="text-muted small text-uppercase fw-semibold mb-2">Gambar Cluster</label>
                             <div class="border rounded-3 p-3 bg-light">
-                                @if($cluster->gambar_cluster)
-                                    <img src="{{ url($cluster->gambar_cluster) }}">
+                                @if($cluster->foto_utama)
+                                    <img src="{{ url($cluster->foto_utama) }}">
                                 @else
                                     <i class="fas fa-image fa-4x text-muted"></i>
                                     <p class="text-muted mt-2 mb-0">Belum ada gambar utama</p>
