@@ -137,59 +137,53 @@ class GaleriController extends Controller
 
         // Hapus foto jika dicentang
         if ($request->has('hapus_foto')) {
-            if ($galeri->foto && file_exists(public_path($galeri->foto))) {
-                unlink(public_path($galeri->foto));
+
+            if ($galeri->foto) {
+
+                $fotoLama =
+                    '/home/u143856011/shared/uploads/galeri/' .
+                    basename($galeri->foto);
+
+                if (file_exists($fotoLama)) {
+                    unlink($fotoLama);
+                }
             }
+
             $data['foto'] = null;
         }
 
         if ($request->hasFile('foto')) {
 
-        // Hapus foto lama ADMIN
-        if ($galeri->foto && file_exists(public_path($galeri->foto))) {
-            unlink(public_path($galeri->foto));
+            // hapus foto lama
+            if ($galeri->foto) {
+
+                $fotoLama =
+                    '/home/u143856011/shared/uploads/galeri/' .
+                    basename($galeri->foto);
+
+                if (file_exists($fotoLama)) {
+                    unlink($fotoLama);
+                }
+            }
+
+            $foto = $request->file('foto');
+
+            $namaFoto = time() . '_' . preg_replace(
+                '/[^a-zA-Z0-9._-]/',
+                '',
+                $foto->getClientOriginalName()
+            );
+
+            $tujuanShared = '/home/u143856011/shared/uploads/galeri';
+
+            if (!file_exists($tujuanShared)) {
+                mkdir($tujuanShared, 0775, true);
+            }
+
+            $foto->move($tujuanShared, $namaFoto);
+
+            $data['foto'] = $namaFoto;
         }
-
-        $fotoLama = '/home/u143856011/shared/uploads/galeri/' . $galeri->foto;
-
-        if ($galeri->foto && file_exists($fotoLama)) {
-            unlink($fotoLama);
-        }
-
-        $foto = $request->file('foto');
-
-        $namaFoto = time() . '_' . preg_replace(
-            '/[^a-zA-Z0-9._-]/',
-            '',
-            $foto->getClientOriginalName()
-        );
-
-        // PATH ADMIN
-        $tujuanAdmin = public_path('uploads/galeri');
-
-        // PATH FRONTEND
-        $tujuanFrontend = 'C:/laragon/www/perumahan-web/public/uploads/galeri';
-
-        // Buat folder jika belum ada
-        if (!file_exists($tujuanAdmin)) {
-            mkdir($tujuanAdmin, 0777, true);
-        }
-
-        if (!file_exists($tujuanFrontend)) {
-            mkdir($tujuanFrontend, 0777, true);
-        }
-
-        // Upload ke ADMIN
-        $foto->move($tujuanAdmin, $namaFoto);
-
-        // Copy ke FRONTEND
-        copy(
-            $tujuanAdmin . '/' . $namaFoto,
-            $tujuanFrontend . '/' . $namaFoto
-        );
-
-        $data['foto'] = 'uploads/galeri/' . $namaFoto;
-    }
 
         $galeri->update($data);
 
