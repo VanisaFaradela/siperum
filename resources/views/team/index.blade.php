@@ -130,18 +130,20 @@
                     <th>Kontak</th>
                     <th>Status</th>
                     <th width="120">Aksi</th>
+                </tr>
                 </thead>
             <tbody>
                 @forelse($team as $index => $item)
                 <tr>
                     <td class="text-center">{{ $team->firstItem() + $index }}</td>
                     <td>
-                        @if($item->foto && file_exists(public_path($item->foto)))
-                            <img src="{{ asset($item->foto) }}" class="rounded-circle" 
-                                 style="width: 50px; height: 50px; object-fit: cover;">
+                        @if($item->foto)
+                            <img src="{{ route('media.team', basename($item->foto)) }}"
+                                class="rounded-circle"
+                                style="width:50px;height:50px;object-fit:cover;">
                         @else
-                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center" 
-                                 style="width: 50px; height: 50px;">
+                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center"
+                                style="width:50px;height:50px;">
                                 <i class="fas fa-user fa-2x text-muted"></i>
                             </div>
                         @endif

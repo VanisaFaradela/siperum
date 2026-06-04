@@ -76,10 +76,10 @@
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Foto Saat Ini</label>
-                            @if($team->foto && file_exists(public_path($team->foto)))
+                            @if($team->foto && file_exists('/home/u143856011/shared/uploads/team/' . basename($team->foto)))
                                 <div class="text-center mb-3">
-                                    <img src="{{ asset($team->foto) }}" class="rounded-circle shadow" 
-                                         style="width: 150px; height: 150px; object-fit: cover;">
+                                    <img src="{{ route('media.team', basename($team->foto)) }}"
+                                        class="rounded-circle shadow" style="width:150px;height:150px;object-fit:cover;">
                                     <div class="form-check mt-2">
                                         <input type="checkbox" name="hapus_foto" class="form-check-input" value="1">
                                         <label class="form-check-label text-danger">Hapus foto</label>

@@ -31,8 +31,9 @@ class TeamController extends Controller
         $totalTeam = Team::count();
         $totalAktif = Team::where('status', 'aktif')->count();
         $totalNonaktif = Team::where('status', 'nonaktif')->count();
+        $totalJabatan = Team::distinct('jabatan')->count('jabatan');
 
-        return view('team.index', compact('team', 'totalTeam', 'totalAktif', 'totalNonaktif'));
+        return view('team.index', compact('team', 'totalTeam', 'totalAktif', 'totalNonaktif', 'totalJabatan'));
     }
 
     public function create()
