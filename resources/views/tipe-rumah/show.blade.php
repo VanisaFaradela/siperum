@@ -20,7 +20,7 @@
             <a href="{{ route('tipe-rumah.edit', $tipeRumah->id_tipe) }}" class="btn btn-warning btn-sm me-2">
                 <i class="fas fa-edit me-1"></i>Edit
             </a>
-            <a href="{{ route('cluster.show', $tipeRumah->cluster_id) }}" class="btn btn-outline-secondary btn-sm">
+            <a href="{{ route('cluster.show', $tipeRumah->cluster->slug) }}" class="btn btn-outline-secondary btn-sm">
                 <i class="fas fa-arrow-left me-1"></i>Kembali
             </a>
         </div>

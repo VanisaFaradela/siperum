@@ -62,6 +62,10 @@ class Cluster extends Model
 
     public function tipeRumah()
     {
-        return $this->hasMany(TipeRumah::class, 'cluster_id', 'id_cluster');
+        return $this->hasMany(
+            TipeRumah::class,
+            'cluster_id',
+            'id_cluster'
+        );
     }
 }

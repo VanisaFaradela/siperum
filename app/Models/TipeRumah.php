@@ -51,6 +51,10 @@ class TipeRumah extends Model
 
     public function cluster()
     {
-        return $this->belongsTo(Cluster::class, 'cluster_id', 'id_cluster');
+        return $this->belongsTo(
+            Cluster::class,
+            'cluster_id',
+            'id_cluster'
+        );
     }
 }

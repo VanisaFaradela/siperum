@@ -25,10 +25,7 @@ class TipeRumahController extends Controller
         // Filter cluster
         if ($request->filled('cluster_id')) {
 
-            $cluster = Cluster::where(
-                'id_cluster',
-                $request->cluster_id
-            )->first();
+           $cluster = Cluster::findOrFail($request->cluster_id);
 
             $query->where(
                 'cluster_id',
@@ -76,9 +73,9 @@ class TipeRumahController extends Controller
         $tipeRumah = $query->paginate(15);
 
         // Statistik
-        $totalTersedia = TipeRumah::where('status', 'tersedia')->count();
-        $totalPromo    = TipeRumah::where('status', 'promo')->count();
-        $totalHabis    = TipeRumah::where('status', 'habis')->count();
+       $totalTersedia = TipeRumah::where('status_unit', 'tersedia')->count();
+       $totalBooking  = TipeRumah::where('status_unit', 'booking')->count();
+       $totalTerjual  = TipeRumah::where('status_unit', 'terjual')->count();
 
         return view(
             'tipe-rumah.index',
@@ -86,8 +83,8 @@ class TipeRumahController extends Controller
                 'tipeRumah',
                 'cluster',
                 'totalTersedia',
-                'totalPromo',
-                'totalHabis'
+                'totalBooking',
+                'totalTerjual'
             )
         );
     }
@@ -121,7 +118,7 @@ class TipeRumahController extends Controller
         }
         
         $request->validate([
-            'cluster_id' => 'required|exists:cluster,cluster_id',
+            'cluster_id' => 'required|exists:cluster,id_cluster',
             'nama_tipe' => 'required|min:3|max:255',
             'luas_bangunan' => 'nullable|numeric|min:0',
             'luas_tanah' => 'nullable|numeric|min:0',
@@ -213,7 +210,9 @@ class TipeRumahController extends Controller
 
         $tipeRumah = TipeRumah::create($data);
 
-        return redirect()->route('cluster.show', $tipeRumah->cluster_id)
+       $cluster = Cluster::findOrFail($tipeRumah->cluster_id);
+
+        return redirect()->route('cluster.show', $cluster->slug)
             ->with('success', 'Tipe rumah berhasil ditambahkan!');
     }
 
@@ -230,7 +229,7 @@ class TipeRumahController extends Controller
             ->where('id_tipe', $id)
             ->firstOrFail();
         
-        $tipeLainnya = TipeRumah::where('cluster_id', $tipeRumah->cluster_id)
+       $tipeLainnya = TipeRumah::where('cluster_id', $tipeRumah->cluster_id)
             ->where('id_tipe', '!=', $tipeRumah->id_tipe)
             ->limit(4)
             ->get();
@@ -479,10 +478,9 @@ class TipeRumahController extends Controller
             }
         }
 
-        $clusterId = $tipeRumah->cluster_id;
-        $tipeRumah->delete();
+       $cluster = Cluster::findOrFail($tipeRumah->cluster_id);
 
-        return redirect()->route('cluster.show', $clusterId)
+        return redirect()->route('cluster.show', $cluster->slug)
             ->with('success', 'Tipe rumah berhasil dihapus!');
     }
 }
