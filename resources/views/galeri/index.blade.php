@@ -122,16 +122,14 @@
         <div class="card border-0 shadow-sm rounded-4 h-100">
             <!-- Gambar -->
             <div class="position-relative">
-                @php
-                    $gambarPath = $item->foto;
-                    $fullPath = $gambarPath ? public_path($gambarPath) : null;
-                    $gambarExists = $gambarPath && $fullPath && file_exists($fullPath);
-                @endphp
-                
-                @if($gambarExists)
-                    <img src="{{ asset($gambarPath) }}" class="card-img-top rounded-top-4" 
-                         style="height: 180px; width: 100%; object-fit: cover;" 
-                         alt="{{ $item->judul_galeri }}">
+                @if(!empty($item->foto))
+                    <img
+                        src="{{ route('media.galeri', basename($item->foto)) }}"
+                        class="card-img-top rounded-top-4"
+                        style="height:180px;width:100%;object-fit:cover;"
+                        alt="{{ $item->judul_galeri }}"
+                        onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\'bg-light rounded-top-4 d-flex flex-column align-items-center justify-content-center\' style=\'height:180px;\'><i class=\'fas fa-image fa-4x text-muted mb-2\'></i><small class=\'text-muted\'>Gambar tidak ditemukan</small></div>';"
+                    >
                 @else
                     <div class="bg-light rounded-top-4 d-flex flex-column align-items-center justify-content-center" style="height: 180px;">
                         <i class="fas fa-image fa-4x text-muted mb-2"></i>

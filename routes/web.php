@@ -55,6 +55,15 @@ Route::resource('berita', BeritaController::class);
 // ============================================
 Route::resource('galeri', GaleriController::class);
 Route::post('/galeri/update-order', [GaleriController::class, 'updateOrder'])->name('galeri.update-order');
+Route::get('/media/galeri/{file}', function ($file) {
+
+    $path = '/home/u143856011/shared/uploads/galeri/' . $file;
+
+    abort_unless(file_exists($path), 404);
+
+    return response()->file($path);
+
+})->where('file', '.*')->name('media.galeri');
 
 // ============================================
 // CRUD KONTAK

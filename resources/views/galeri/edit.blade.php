@@ -84,7 +84,7 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold">Foto Saat Ini</label>
                                 <div class="border rounded-3 p-3 text-center bg-light">
-                                    <img src="{{ asset($galeri->foto) }}" class="img-fluid rounded" style="max-height: 150px;">
+                                    <img src="{{ route('media.galeri', basename($galeri->foto)) }}" class="img-fluid rounded" style="max-height: 150px;">
                                     <div class="form-check mt-2">
                                         <input type="checkbox" name="hapus_foto" class="form-check-input" id="hapusFoto">
                                         <label class="form-check-label text-danger" for="hapusFoto">Hapus foto ini</label>

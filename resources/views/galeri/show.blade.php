@@ -16,7 +16,11 @@
 <div class="row">
     <div class="col-md-8">
         <div class="card-cluster overflow-hidden mb-4">
-            <img src="{{ asset($galeri->foto) }}" class="w-100" alt="{{ $galeri->judul_galeri }}">
+            <img
+                src="{{ route('media.galeri', basename($galeri->foto)) }}"
+                class="w-100"
+                alt="{{ $galeri->judul_galeri }}"
+            >
         </div>
     </div>
     

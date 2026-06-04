@@ -84,32 +84,16 @@ class GaleriController extends Controller
             $foto->getClientOriginalName()
         );
 
-        // PATH ADMIN
-        $tujuanAdmin = public_path('uploads/galeri');
+        $tujuanShared = '/home/u143856011/shared/uploads/galeri';
 
-        // PATH FRONTEND
-        $tujuanFrontend = 'C:/laragon/www/perumahan-web/public/uploads/galeri';
-
-        // Buat folder jika belum ada
-        if (!file_exists($tujuanAdmin)) {
-            mkdir($tujuanAdmin, 0777, true);
+        if (!file_exists($tujuanShared)) {
+            mkdir($tujuanShared, 0777, true);
         }
 
-        if (!file_exists($tujuanFrontend)) {
-            mkdir($tujuanFrontend, 0777, true);
-        }
-
-        // Simpan ke ADMIN
-        $foto->move($tujuanAdmin, $namaFoto);
-
-        // Copy ke FRONTEND
-        copy(
-            $tujuanAdmin . '/' . $namaFoto,
-            $tujuanFrontend . '/' . $namaFoto
-        );
+        $foto->move($tujuanShared, $namaFoto);
 
         // Simpan path database
-        $data['foto'] = 'uploads/galeri/' . $namaFoto;
+       $data['foto'] = $namaFoto;
     }
 
         Galeri::create($data);
@@ -166,11 +150,10 @@ class GaleriController extends Controller
             unlink(public_path($galeri->foto));
         }
 
-        // Hapus foto lama FRONTEND
-        $fotoFrontendLama = 'C:/laragon/www/perumahan-web/public/' . $galeri->foto;
+        $fotoLama = '/home/u143856011/shared/uploads/galeri/' . $galeri->foto;
 
-        if ($galeri->foto && file_exists($fotoFrontendLama)) {
-            unlink($fotoFrontendLama);
+        if ($galeri->foto && file_exists($fotoLama)) {
+            unlink($fotoLama);
         }
 
         $foto = $request->file('foto');
@@ -222,16 +205,10 @@ class GaleriController extends Controller
         
         $galeri = Galeri::findOrFail($id);
         
-        // Hapus ADMIN
-        if ($galeri->foto && file_exists(public_path($galeri->foto))) {
-            unlink(public_path($galeri->foto));
-        }
+        $fotoPath = '/home/u143856011/shared/uploads/galeri/' . $galeri->foto;
 
-        // Hapus FRONTEND
-        $fotoFrontend = 'C:/laragon/www/perumahan-web/public/' . $galeri->foto;
-
-        if ($galeri->foto && file_exists($fotoFrontend)) {
-            unlink($fotoFrontend);
+        if ($galeri->foto && file_exists($fotoPath)) {
+            unlink($fotoPath);
         }
 
         $galeri->delete();
