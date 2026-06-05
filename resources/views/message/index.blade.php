@@ -68,10 +68,6 @@
                         <i class="fas fa-reply-all fa-2x text-success"></i>
                     </div>
                 </div>
-                <div class="flex-grow-1 ms-3">
-                    <h6 class="text-muted mb-1">Dibalas</h6>
-                    <h3 class="fw-bold mb-0">{{ $totalDibalas ?? 0 }}</h3>
-                </div>
             </div>
         </div>
     </div>
