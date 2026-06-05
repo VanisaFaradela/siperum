@@ -59,18 +59,6 @@
             </div>
         </div>
     </div>
-    
-    <div class="col-md-3">
-        <div class="card-cluster p-3">
-            <div class="d-flex align-items-center">
-                <div class="flex-shrink-0">
-                    <div class="bg-success bg-opacity-10 rounded-circle p-3">
-                        <i class="fas fa-reply-all fa-2x text-success"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <!-- Filter Section -->
