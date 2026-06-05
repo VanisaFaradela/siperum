@@ -27,10 +27,9 @@ class MessageController extends Controller
         $totalMessage = Message::count();
         $totalBelumDibaca = Message::where('status', 'belum_dibaca')->count();
         $totalSudahDibaca = Message::where('status', 'sudah_dibaca')->count();
-        $totalDibalas = Message::where('status', 'dibalas')->count();
 
         return view('message.index', compact(
-            'message', 'totalMessage', 'totalBelumDibaca', 'totalSudahDibaca', 'totalDibalas'
+            'message', 'totalMessage', 'totalBelumDibaca', 'totalSudahDibaca',
         ));
     }
 
@@ -44,25 +43,6 @@ class MessageController extends Controller
         }
 
         return view('message.show', compact('message'));
-    }
-
-    public function reply(Request $request, Message $message)
-    {
-        $request->validate([
-            'balasan' => 'required|min:5'
-        ]);
-
-        $message->update([
-            'status' => 'dibalas',
-            'balasan' => $request->balasan,
-            'dibalas_pada' => now()
-        ]);
-
-        // Kirim email balasan (opsional)
-        // Mail::to($message->email)->send(new ReplyMessage($message, $request->balasan));
-
-        return redirect()->route('message.index')
-            ->with('success', 'Balasan berhasil dikirim!');
     }
 
     public function destroy(Message $message)

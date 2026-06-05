@@ -112,39 +112,12 @@
         
         <!-- Kolom Kanan (4) -->
         <div class="col-md-4">
-            @if($message->status != 'dibalas')
-            <div class="card border-0 shadow-sm rounded-4 mb-4">
-                <div class="card-body p-4">
-                    <h5 class="fw-bold mb-3">
-                        <i class="fas fa-reply me-2 text-success"></i>
-                        Balas Pesan
-                    </h5>
-                    <form method="POST" action="{{ route('message.reply', $message->id) }}">
-                        @csrf
-                        <div class="mb-3">
-                            <textarea name="balasan" class="form-control" rows="5" placeholder="Tulis balasan Anda di sini..." required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-green w-100">
-                            <i class="fas fa-paper-plane me-2"></i>Kirim Balasan
-                        </button>
-                    </form>
-                </div>
-            </div>
-            @endif
-            
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-body p-4">
                     <div class="d-grid gap-2">
                         <a href="{{ route('message.index') }}" class="btn btn-outline-secondary">
                             <i class="fas fa-arrow-left me-2"></i>Kembali
                         </a>
-                        <button onclick="confirmDelete({{ $message->id }})" class="btn btn-outline-danger">
-                            <i class="fas fa-trash me-2"></i>Hapus Pesan
-                        </button>
-                        <form id="delete-form-{{ $message->id }}" action="{{ route('message.destroy', $message->id) }}" method="POST" class="d-none">
-                            @csrf
-                            @method('DELETE')
-                        </form>
                     </div>
                 </div>
             </div>

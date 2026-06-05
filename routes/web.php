@@ -94,7 +94,6 @@ Route::get('/media/galeri/{file}', function ($file) {
 // CRUD KONTAK
 // ============================================
 Route::resource('kontak', KontakController::class);
-Route::post('/kontak/{kontak}/reply', [KontakController::class, 'reply'])->name('kontak.reply');
 Route::post('/kontak/bulk-delete', [KontakController::class, 'bulkDelete'])->name('kontak.bulk-delete');
 Route::patch('/kontak/{id}/toggle-status', [KontakController::class, 'toggleStatus'])->name('kontak.toggle-status');
 
@@ -102,7 +101,6 @@ Route::patch('/kontak/{id}/toggle-status', [KontakController::class, 'toggleStat
 // CRUD MESSAGE
 // ============================================
 Route::resource('message', MessageController::class);
-Route::post('/message/{message}/reply', [MessageController::class, 'reply'])->name('message.reply');
 Route::post('/message/bulk-delete', [MessageController::class, 'bulkDelete'])->name('message.bulk-delete');
 
 // ============================================

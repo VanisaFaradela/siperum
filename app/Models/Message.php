@@ -13,7 +13,7 @@ class Message extends Model
 
     protected $fillable = [
         'nama', 'email', 'telepon', 'subjek', 'pesan',
-        'status', 'dibaca_pada', 'balasan', 'dibalas_pada'
+        'status', 'dibaca_pada'
     ];
 
     protected $casts = [
