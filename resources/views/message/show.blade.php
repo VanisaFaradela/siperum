@@ -88,26 +88,9 @@
                         @if($message->dibaca_pada)
                             <span class="ms-3"><i class="fas fa-eye me-1"></i> Dibaca: {{ $message->dibaca_pada->format('d F Y H:i') }}</span>
                         @endif
-                        @if($message->dibalas_pada)
-                            <span class="ms-3"><i class="fas fa-reply me-1"></i> Dibalas: {{ $message->dibalas_pada->format('d F Y H:i') }}</span>
-                        @endif
                     </div>
                 </div>
             </div>
-            
-            @if($message->balasan)
-            <div class="card border-0 shadow-sm rounded-4">
-                <div class="card-body p-4">
-                    <h5 class="fw-bold mb-3">
-                        <i class="fas fa-reply-all me-2 text-success"></i>
-                        Balasan Anda
-                    </h5>
-                    <div class="border rounded-3 p-4 bg-light">
-                        <p class="mb-0" style="white-space: pre-wrap;">{{ $message->balasan }}</p>
-                    </div>
-                </div>
-            </div>
-            @endif
         </div>
         
         <!-- Kolom Kanan (4) -->

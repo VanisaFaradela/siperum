@@ -81,7 +81,6 @@
                 <option value="">Semua Status</option>
                 <option value="belum_dibaca" {{ request('status') == 'belum_dibaca' ? 'selected' : '' }}>Belum Dibaca</option>
                 <option value="sudah_dibaca" {{ request('status') == 'sudah_dibaca' ? 'selected' : '' }}>Sudah Dibaca</option>
-                <option value="dibalas" {{ request('status') == 'dibalas' ? 'selected' : '' }}>Dibalas</option>
             </select>
         </div>
         
