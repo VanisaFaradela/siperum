@@ -74,7 +74,7 @@
                                 <input type="checkbox" class="form-check-input" id="remember" name="remember">
                                 <label class="form-check-label small" for="remember">Ingat saya</label>
                             </div>
-                            <a href="{{ url('/lupa-password') }}" class="text-success text-decoration-none small">
+                            <a href="{{ url('/reset-password') }}" class="text-success text-decoration-none small">
                                 Lupa password?
                             </a>
                         </div>

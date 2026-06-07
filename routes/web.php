@@ -36,40 +36,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 // ============================================
 // ROUTE LUPA PASSWORD (LANGSUNG KE TABEL ADMINS)
 // ============================================
-
-// Halaman form lupa password
-Route::get('/lupa-password', function () {
-    return view('lupa-password');
-})->name('lupa.password');
-
-// Proses kirim link reset password
-Route::post('/lupa-password/proses', function (Request $request) {
-    // Validasi format email
-    $request->validate([
-        'email' => 'required|email'
-    ]);
-
-    // LANGSUNG CEK KE TABEL ADMINS menggunakan DB facade
-    $admin = DB::table('admins')->where('email', $request->email)->first();
-    
-    // Jika email tidak ditemukan
-    if (!$admin) {
-        return back()->withErrors(['email' => 'Email tidak terdaftar di sistem kami.']);
-    }
-
-    // Buat token unik
-    $token = Str::random(60);
-    
-    // Simpan token di cache (berlaku 15 menit)
-    Cache::put('reset_' . $token, $admin->email, 900);
-
-    // Link reset
-    $resetLink = url('/reset-password/' . $token);
-    
-    return back()->with('status', "Klik link ini untuk reset password: <a href='$resetLink'>$resetLink</a>");
-});
-
-// Halaman form reset password
+// Halaman form reset password (via link manual)
 Route::get('/reset-password/{token}', function ($token) {
     // Cek token di cache
     $email = Cache::get('reset_' . $token);
@@ -81,7 +48,7 @@ Route::get('/reset-password/{token}', function ($token) {
     return view('reset-password', ['token' => $token, 'email' => $email]);
 });
 
-// Proses reset password
+// Proses reset password (submit form)
 Route::post('/reset-password/proses', function (Request $request) {
     $request->validate([
         'email' => 'required|email',
