@@ -4,10 +4,10 @@
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="row justify-content-center align-items-center" style="min-height: calc(100vh - 100px);">
         <div class="col-md-5">
             <!-- Card Reset Password -->
-            <div class="card shadow border-0 rounded-4">
+            <div class="card shadow border-0 rounded-4" data-aos="fade-up">
                 <div class="card-body p-5">
                     <!-- Icon -->
                     <div class="text-center mb-4">
@@ -43,8 +43,6 @@
                         <div class="mb-3">
                             <label for="email" class="form-label small fw-semibold">Email</label>
                             <input type="email" 
-                                   name="email" 
-                                   id="email" 
                                    class="form-control bg-light" 
                                    value="{{ $email }}" 
                                    readonly 
@@ -57,9 +55,9 @@
                             <label for="password" class="form-label small fw-semibold">Password Baru</label>
                             <div class="input-group">
                                 <input type="password" 
-                                       name="password" 
-                                       id="password" 
                                        class="form-control" 
+                                       id="password" 
+                                       name="password" 
                                        placeholder="Minimal 6 karakter"
                                        required>
                                 <button class="btn btn-outline-secondary" type="button" id="togglePassword">
@@ -73,9 +71,9 @@
                             <label for="password_confirmation" class="form-label small fw-semibold">Konfirmasi Password Baru</label>
                             <div class="input-group">
                                 <input type="password" 
-                                       name="password_confirmation" 
-                                       id="password_confirmation" 
                                        class="form-control" 
+                                       id="password_confirmation" 
+                                       name="password_confirmation" 
                                        placeholder="Ulangi password baru"
                                        required>
                                 <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
@@ -86,14 +84,14 @@
 
                         <!-- Tombol Reset -->
                         <div class="d-grid gap-2 mb-3">
-                            <button type="submit" class="btn btn-success py-2 fw-semibold" id="btnSubmit">
+                            <button type="submit" class="btn btn-green py-2 fw-semibold" id="btnSubmit">
                                 <i class="fas fa-save me-2"></i>Reset Password
                             </button>
                         </div>
 
                         <!-- Link Kembali -->
                         <div class="text-center">
-                            <a href="{{ url('/login') }}" class="text-decoration-none small">
+                            <a href="{{ url('/login') }}" class="text-decoration-none small text-success">
                                 <i class="fas fa-arrow-left me-1"></i> Kembali ke Login
                             </a>
                         </div>
@@ -105,28 +103,14 @@
 </div>
 
 <style>
-    .form-control, .btn {
-        border-radius: 8px !important;
+    .input-group .btn {
+        border-top-left-radius: 0 !important;
+        border-bottom-left-radius: 0 !important;
     }
     
     .form-control:focus {
         border-color: #2ecc71 !important;
         box-shadow: 0 0 0 0.1rem rgba(46, 204, 113, 0.25) !important;
-    }
-    
-    .btn-success {
-        background-color: #2ecc71;
-        border-color: #2ecc71;
-    }
-    
-    .btn-success:hover {
-        background-color: #27ae60;
-        border-color: #27ae60;
-    }
-    
-    .input-group .btn {
-        border-top-left-radius: 0 !important;
-        border-bottom-left-radius: 0 !important;
     }
 </style>
 @endsection
