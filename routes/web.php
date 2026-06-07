@@ -34,9 +34,23 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // ============================================
-// ROUTE LUPA PASSWORD (LANGSUNG KE TABEL ADMINS)
+// ROUTE RESET PASSWORD
 // ============================================
-// Halaman form reset password (via link manual)
+
+// Halaman reset password (tanpa token) - LANGSUNG buat token dan redirect
+Route::get('/reset-password', function () {
+    // Buat token sementara
+    $token = Str::random(60);
+    $email = 'vanisaadmin@gmail.com'; // Ganti dengan email yang terdaftar
+    
+    // Simpan token di cache (berlaku 15 menit)
+    Cache::put('reset_' . $token, $email, 900);
+    
+    // Redirect ke halaman reset dengan token
+    return redirect('/reset-password/' . $token);
+});
+
+// Halaman form reset password (dengan token)
 Route::get('/reset-password/{token}', function ($token) {
     // Cek token di cache
     $email = Cache::get('reset_' . $token);
