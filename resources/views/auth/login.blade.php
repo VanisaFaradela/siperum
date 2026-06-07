@@ -54,12 +54,18 @@
                             <label for="password" class="form-label small fw-semibold">Password</label>
                             <div class="input-group">
                                 <input type="password" 
-                                       class="form-control @error('password') is-invalid @enderror" 
-                                       id="password" 
-                                       name="password" 
-                                       placeholder="••••••••"
-                                       required>
+                                    class="form-control @error('password') is-invalid @enderror" 
+                                    id="password" 
+                                    name="password" 
+                                    placeholder="••••••••"
+                                    required>
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                    <i class="bi bi-eye-slash"></i>
+                                </button>
                             </div>
+                            @error('password')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <!-- Remember & Forgot -->
@@ -67,9 +73,9 @@
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="remember" name="remember">
                                 <label class="form-check-label small" for="remember">Ingat saya</label>
-                            </div>
-                            <a href="#" class="text-decoration-none small text-success">Lupa password?</a>
-                        </div>
+                            <a href="{{ url('/lupa-password') }}" class="text-success text-decoration-none">
+                                Lupa password?
+                            </a>
 
                         <!-- Button -->
                         <button type="submit" class="btn btn-success w-100 py-2 mb-3">
