@@ -299,7 +299,7 @@
         <div class="shape" style="width: 180px; height: 180px; top: 30%; right: 15%;"></div>
     </div>
 
-    @if(!request()->routeIs('login'))
+    @if(!request()->routeIs('login') && !request()->routeIs('lupa.password') && !request()->routeIs('password.reset'))
     <!-- Navbar (tidak tampil di halaman login) -->
     <nav class="navbar navbar-expand-lg navbar-custom">
         <div class="container">
