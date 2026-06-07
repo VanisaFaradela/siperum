@@ -51,16 +51,18 @@
                             <small class="text-muted">Password akan direset untuk email ini</small>
                         </div>
 
-                        <!-- Password Baru (TANPA PASSWORD LAMA) -->
+                        <!-- Password Baru -->
                         <div class="mb-3">
                             <label for="password" class="form-label small fw-semibold">Password Baru</label>
                             <div class="input-group">
                                 <input type="password" 
-                                       class="form-control" 
-                                       id="password" 
-                                       name="password" 
-                                       placeholder="Minimal 6 karakter"
-                                       required>
+                                    class="form-control" 
+                                    id="password" 
+                                    name="password" 
+                                    placeholder="Minimal 6 karakter"
+                                    autocomplete="new-password"
+                                    autocomplete="off"
+                                    required>
                                 <button class="btn btn-outline-secondary" type="button" id="togglePassword">
                                     <i class="bi bi-eye-slash"></i>
                                 </button>
