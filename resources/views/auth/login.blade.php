@@ -49,7 +49,7 @@
                                    required>
                         </div>
 
-                        <!-- Password -->
+                        <!-- Password dengan Icon Mata -->
                         <div class="mb-3">
                             <label for="password" class="form-label small fw-semibold">Password</label>
                             <div class="input-group">
@@ -59,7 +59,7 @@
                                     name="password" 
                                     placeholder="••••••••"
                                     required>
-                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword" style="border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem;">
                                     <i class="bi bi-eye-slash"></i>
                                 </button>
                             </div>
@@ -68,19 +68,23 @@
                             @enderror
                         </div>
 
-                        <!-- Remember & Forgot -->
-                        <div class="d-flex justify-content-between align-items-center mb-4">
+                        <!-- Remember & Forgot (diberi jarak bawah) -->
+                        <div class="d-flex justify-content-between align-items-center mb-4 mt-2">
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="remember" name="remember">
                                 <label class="form-check-label small" for="remember">Ingat saya</label>
-                            <a href="{{ url('/lupa-password') }}" class="text-success text-decoration-none">
+                            </div>
+                            <a href="{{ url('/lupa-password') }}" class="text-success text-decoration-none small">
                                 Lupa password?
                             </a>
+                        </div>
 
-                        <!-- Button -->
-                        <button type="submit" class="btn btn-success w-100 py-2 mb-3">
-                            <i class="fas fa-sign-in-alt me-2"></i>Masuk
-                        </button>
+                        <!-- Tombol Masuk (diberi jarak dan lebar penuh) -->
+                        <div class="d-grid gap-2 mb-3">
+                            <button type="submit" class="btn btn-success py-2 fw-semibold">
+                                Masuk
+                            </button>
+                        </div>
 
                         <!-- Demo Account -->
                         <div class="text-center">
@@ -128,19 +132,22 @@
 </style>
 
 <script>
-document.getElementById('togglePassword').addEventListener('click', function() {
-    const password = document.getElementById('password');
-    const icon = this.querySelector('i');
-    
-    if (password.type === 'password') {
-        password.type = 'text';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
-    } else {
-        password.type = 'password';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
-    }
-});
+    document.addEventListener('DOMContentLoaded', function() {
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+
+        if (togglePassword && password) {
+            togglePassword.addEventListener('click', function() {
+                // Toggle type input
+                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                password.setAttribute('type', type);
+                
+                // Toggle icon
+                const icon = this.querySelector('i');
+                icon.classList.toggle('bi-eye');
+                icon.classList.toggle('bi-eye-slash');
+            });
+        }
+    });
 </script>
 @endsection
