@@ -39,8 +39,8 @@
                         @csrf
                         <input type="hidden" name="token" value="{{ $token }}">
                         
-                        <!-- Email (Readonly) -->
-                        <div class="mb-3">
+                        <!-- Email (Readonly - hanya info) -->
+                        <div class="mb-4">
                             <label for="email" class="form-label small fw-semibold">Email</label>
                             <input type="email" 
                                    class="form-control bg-light" 
@@ -48,9 +48,10 @@
                                    readonly 
                                    disabled>
                             <input type="hidden" name="email" value="{{ $email }}">
+                            <small class="text-muted">Password akan direset untuk email ini</small>
                         </div>
 
-                        <!-- Password Baru -->
+                        <!-- Password Baru (TANPA PASSWORD LAMA) -->
                         <div class="mb-3">
                             <label for="password" class="form-label small fw-semibold">Password Baru</label>
                             <div class="input-group">
@@ -64,6 +65,7 @@
                                     <i class="bi bi-eye-slash"></i>
                                 </button>
                             </div>
+                            <small class="text-muted">Minimal 6 karakter</small>
                         </div>
 
                         <!-- Konfirmasi Password Baru -->
