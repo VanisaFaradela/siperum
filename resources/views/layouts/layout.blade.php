@@ -472,7 +472,7 @@
             <li>
                 <a href="{{ route('pages.index') }}" 
                 class="{{ request()->routeIs('pages.*') ? 'active' : '' }}">
-                    <i class="fas fa-file-alt"></i> <span>Manajemen Halaman</span>
+                    <i class="fas fa-file-alt"></i> <span>Tentang Kami</span>
                 </a>
             </li>
 
