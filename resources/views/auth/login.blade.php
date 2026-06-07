@@ -131,6 +131,7 @@
     }
 </style>
 
+@push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const togglePassword = document.querySelector('#togglePassword');
@@ -144,10 +145,13 @@
                 
                 // Toggle icon
                 const icon = this.querySelector('i');
-                icon.classList.toggle('bi-eye');
-                icon.classList.toggle('bi-eye-slash');
+                if (icon) {
+                    icon.classList.toggle('bi-eye');
+                    icon.classList.toggle('bi-eye-slash');
+                }
             });
         }
     });
 </script>
+@endpush
 @endsection
