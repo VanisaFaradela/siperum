@@ -104,11 +104,11 @@
         </div>
         
         <div class="col-md-3">
-            <label class="form-label small fw-semibold">Memiliki Perusahaan</label>
+            <label class="form-label small fw-semibold">Alamat</label>
             <select name="has_perusahaan" class="form-select bg-light border-0">
                 <option value="">Semua</option>
-                <option value="yes" {{ request('has_perusahaan') == 'yes' ? 'selected' : '' }}>Memiliki Perusahaan</option>
-                <option value="no" {{ request('has_perusahaan') == 'no' ? 'selected' : '' }}>Tanpa Perusahaan</option>
+                <option value="yes" {{ request('has_perusahaan') == 'yes' ? 'selected' : '' }}>Memiliki Alamat</option>
+                <option value="no" {{ request('has_perusahaan') == 'no' ? 'selected' : '' }}>Tanpa Alamat</option>
             </select>
         </div>
         
