@@ -1,64 +1,140 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Reset Password</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-</head>
-<body class="bg-light">
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header bg-primary text-white">Reset Password</div>
-                    <div class="card-body">
-                        @if(session('status'))
-                            <div class="alert alert-success">{{ session('status') }}</div>
-                        @endif
-                        @if($errors->any())
-                            <div class="alert alert-danger">{{ $errors->first() }}</div>
-                        @endif
+@extends('layouts.app')
 
-                        <form method="POST" action="{{ url('/reset-password/proses') }}">
-                            @csrf
-                            <input type="hidden" name="token" value="{{ $token }}">
-                            
-                            <div class="mb-3">
-                                <label>Email</label>
-                                <input type="email" name="email" class="form-control" value="{{ $email }}" readonly required>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label>Password Baru</label>
-                                <div class="input-group">
-                                    <input type="password" name="password" id="password" class="form-control" required>
-                                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-                                        <i class="bi bi-eye-slash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label>Konfirmasi Password Baru</label>
-                                <div class="input-group">
-                                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" required>
-                                    <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
-                                        <i class="bi bi-eye-slash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <button type="submit" class="btn btn-primary w-100">Reset Password</button>
-                        </form>
+@section('title', 'Reset Password - SIPERUM')
+
+@section('content')
+<div class="container">
+    <div class="row justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="col-md-5">
+            <!-- Card Reset Password -->
+            <div class="card shadow border-0 rounded-4">
+                <div class="card-body p-5">
+                    <!-- Icon -->
+                    <div class="text-center mb-4">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-success bg-opacity-10 rounded-circle p-3 mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-lock fa-3x text-success"></i>
+                        </div>
+                        <h4 class="fw-bold mb-1">Reset Password</h4>
+                        <p class="text-muted small mb-0">Buat password baru untuk akun Anda</p>
                     </div>
+
+                    <!-- Alert Status -->
+                    @if(session('status'))
+                        <div class="alert alert-success alert-dismissible fade show py-2" role="alert">
+                            <small><i class="fas fa-check-circle me-1"></i> {{ session('status') }}</small>
+                            <button type="button" class="btn-close py-2" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
+                    <!-- Alert Error -->
+                    @if($errors->any())
+                        <div class="alert alert-danger alert-dismissible fade show py-2" role="alert">
+                            <small><i class="fas fa-exclamation-circle me-1"></i> {{ $errors->first() }}</small>
+                            <button type="button" class="btn-close py-2" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
+                    <!-- Form Reset Password -->
+                    <form method="POST" action="{{ url('/reset-password/proses') }}" id="formResetPassword">
+                        @csrf
+                        <input type="hidden" name="token" value="{{ $token }}">
+                        
+                        <!-- Email (Readonly) -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label small fw-semibold">Email</label>
+                            <input type="email" 
+                                   name="email" 
+                                   id="email" 
+                                   class="form-control bg-light" 
+                                   value="{{ $email }}" 
+                                   readonly 
+                                   disabled>
+                            <input type="hidden" name="email" value="{{ $email }}">
+                        </div>
+
+                        <!-- Password Baru -->
+                        <div class="mb-3">
+                            <label for="password" class="form-label small fw-semibold">Password Baru</label>
+                            <div class="input-group">
+                                <input type="password" 
+                                       name="password" 
+                                       id="password" 
+                                       class="form-control" 
+                                       placeholder="Minimal 6 karakter"
+                                       required>
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                    <i class="bi bi-eye-slash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Konfirmasi Password Baru -->
+                        <div class="mb-4">
+                            <label for="password_confirmation" class="form-label small fw-semibold">Konfirmasi Password Baru</label>
+                            <div class="input-group">
+                                <input type="password" 
+                                       name="password_confirmation" 
+                                       id="password_confirmation" 
+                                       class="form-control" 
+                                       placeholder="Ulangi password baru"
+                                       required>
+                                <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
+                                    <i class="bi bi-eye-slash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Tombol Reset -->
+                        <div class="d-grid gap-2 mb-3">
+                            <button type="submit" class="btn btn-success py-2 fw-semibold" id="btnSubmit">
+                                <i class="fas fa-save me-2"></i>Reset Password
+                            </button>
+                        </div>
+
+                        <!-- Link Kembali -->
+                        <div class="text-center">
+                            <a href="{{ url('/login') }}" class="text-decoration-none small">
+                                <i class="fas fa-arrow-left me-1"></i> Kembali ke Login
+                            </a>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-        // Toggle untuk Password Baru
+<style>
+    .form-control, .btn {
+        border-radius: 8px !important;
+    }
+    
+    .form-control:focus {
+        border-color: #2ecc71 !important;
+        box-shadow: 0 0 0 0.1rem rgba(46, 204, 113, 0.25) !important;
+    }
+    
+    .btn-success {
+        background-color: #2ecc71;
+        border-color: #2ecc71;
+    }
+    
+    .btn-success:hover {
+        background-color: #27ae60;
+        border-color: #27ae60;
+    }
+    
+    .input-group .btn {
+        border-top-left-radius: 0 !important;
+        border-bottom-left-radius: 0 !important;
+    }
+</style>
+@endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Toggle Password Baru
         const togglePassword = document.querySelector('#togglePassword');
         const password = document.querySelector('#password');
 
@@ -68,12 +144,14 @@
                 password.setAttribute('type', type);
                 
                 const icon = this.querySelector('i');
-                icon.classList.toggle('bi-eye');
-                icon.classList.toggle('bi-eye-slash');
+                if (icon) {
+                    icon.classList.toggle('bi-eye');
+                    icon.classList.toggle('bi-eye-slash');
+                }
             });
         }
 
-        // Toggle untuk Konfirmasi Password
+        // Toggle Konfirmasi Password
         const toggleConfirmPassword = document.querySelector('#toggleConfirmPassword');
         const confirmPassword = document.querySelector('#password_confirmation');
 
@@ -83,10 +161,24 @@
                 confirmPassword.setAttribute('type', type);
                 
                 const icon = this.querySelector('i');
-                icon.classList.toggle('bi-eye');
-                icon.classList.toggle('bi-eye-slash');
+                if (icon) {
+                    icon.classList.toggle('bi-eye');
+                    icon.classList.toggle('bi-eye-slash');
+                }
             });
         }
-    </script>
-</body>
-</html>
+
+        // Loading effect saat submit
+        const form = document.getElementById('formResetPassword');
+        if (form) {
+            form.addEventListener('submit', function() {
+                const btn = document.getElementById('btnSubmit');
+                if (btn) {
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Memproses...';
+                }
+            });
+        }
+    });
+</script>
+@endpush
