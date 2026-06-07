@@ -37,17 +37,18 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 // ROUTE RESET PASSWORD
 // ============================================
 
-// Halaman reset password (tanpa token) - LANGSUNG buat token dan redirect
+// Halaman reset password
 Route::get('/reset-password', function () {
+
     $token = Str::random(60);
 
-    // Tidak menyimpan email lagi
+    // simpan token selama 15 menit
     Cache::put('reset_' . $token, true, 900);
 
     return redirect('/reset-password/' . $token);
 });
 
-// Halaman form reset password (dengan token)
+// Form reset password
 Route::get('/reset-password/{token}', function ($token) {
 
     if (!Cache::has('reset_' . $token)) {
@@ -61,13 +62,16 @@ Route::get('/reset-password/{token}', function ($token) {
     ]);
 });
 
-// Proses reset password (submit form)
+// Proses reset password
 Route::post('/reset-password/proses', function (Request $request) {
 
     $request->validate([
         'email' => 'required|email|exists:admins,email',
         'password' => 'required|min:6|confirmed',
         'token' => 'required'
+    ], [
+        'email.exists' => 'Email admin tidak ditemukan.',
+        'password.confirmed' => 'Konfirmasi password tidak cocok.'
     ]);
 
     if (!Cache::has('reset_' . $request->token)) {
@@ -84,8 +88,10 @@ Route::post('/reset-password/proses', function (Request $request) {
 
     Cache::forget('reset_' . $request->token);
 
-    return redirect('/login')
-        ->with('status', 'Password berhasil diubah.');
+    return redirect('/login')->with(
+        'status',
+        'Password berhasil diubah.'
+    );
 });
 
 // ============================================

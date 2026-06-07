@@ -37,18 +37,19 @@
                     <!-- Form Reset Password -->
                     <form method="POST" action="{{ url('/reset-password/proses') }}" id="formResetPassword">
                         @csrf
+                        <input type="hidden" name="token" value="{{ $token }}">
+
                         <div class="mb-4">
                             <label for="email" class="form-label small fw-semibold">
                                 Email Admin
                             </label>
 
-                            <input
-                                type="email"
+                            <input type="email"
                                 name="email"
                                 id="email"
                                 class="form-control @error('email') is-invalid @enderror"
-                                value="{{ old('email') }}"
                                 placeholder="Masukkan email admin"
+                                value="{{ old('email') }}"
                                 required>
 
                             @error('email')
@@ -58,7 +59,7 @@
                             @enderror
 
                             <small class="text-muted">
-                                Masukkan email akun admin yang ingin diubah passwordnya.
+                                Masukkan email admin yang ingin diubah passwordnya
                             </small>
                         </div>
 
