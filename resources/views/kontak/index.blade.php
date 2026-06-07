@@ -130,7 +130,7 @@
                     <th>Nama</th>
                     <th>Email</th>
                     <th>Telepon</th>
-                    <th>Perusahaan</th>
+                    <th>Alamat</th>
                     <th>Status</th>
                     <th>Media Sosial</th>
                     <th>Tanggal</th>

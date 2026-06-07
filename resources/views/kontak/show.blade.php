@@ -45,7 +45,7 @@
                             <td>: {{ $kontak->telepon ?? '-' }}</td>
                         </tr>
                         <tr>
-                            <td><strong>Perusahaan</strong></td>
+                            <td><strong>Alamat</strong></td>
                             <td>: {{ $kontak->perusahaan ?? '-' }}</td>
                         </tr>
                         <tr>

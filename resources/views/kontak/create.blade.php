@@ -52,7 +52,7 @@
                         </div>
                         
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold">Perusahaan</label>
+                            <label class="form-label fw-semibold">Alamat</label>
                             <input type="text" name="perusahaan" class="form-control @error('perusahaan') is-invalid @enderror" 
                                    value="{{ old('perusahaan') }}" placeholder="PT. Contoh Perusahaan">
                             @error('perusahaan')<div class="invalid-feedback">{{ $message }}</div>@enderror
