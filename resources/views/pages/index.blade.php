@@ -1,12 +1,12 @@
 @extends('layouts.layout')
 
-@section('title', 'Manajemen Halaman - SIPERUM')
+@section('title', 'Tentang Kami - SIPERUM')
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h4 class="fw-bold mb-0">
         <i class="fas fa-file-alt me-2 text-success"></i>
-        Manajemen Halaman
+        Tentang Kami
     </h4>
     <a href="{{ route('pages.create') }}" class="btn btn-green">
         <i class="fas fa-plus me-2"></i>Tambah Halaman Baru
