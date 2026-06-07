@@ -37,18 +37,29 @@
                     <!-- Form Reset Password -->
                     <form method="POST" action="{{ url('/reset-password/proses') }}" id="formResetPassword">
                         @csrf
-                        <input type="hidden" name="token" value="{{ $token }}">
-                        
-                        <!-- Email (Readonly - hanya info) -->
                         <div class="mb-4">
-                            <label for="email" class="form-label small fw-semibold">Email</label>
-                            <input type="email" 
-                                   class="form-control bg-light" 
-                                   value="{{ $email }}" 
-                                   readonly 
-                                   disabled>
-                            <input type="hidden" name="email" value="{{ $email }}">
-                            <small class="text-muted">Password akan direset untuk email ini</small>
+                            <label for="email" class="form-label small fw-semibold">
+                                Email Admin
+                            </label>
+
+                            <input
+                                type="email"
+                                name="email"
+                                id="email"
+                                class="form-control @error('email') is-invalid @enderror"
+                                value="{{ old('email') }}"
+                                placeholder="Masukkan email admin"
+                                required>
+
+                            @error('email')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
+                            <small class="text-muted">
+                                Masukkan email akun admin yang ingin diubah passwordnya.
+                            </small>
                         </div>
 
                         <!-- Password Baru -->

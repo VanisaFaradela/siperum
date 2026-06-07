@@ -39,53 +39,53 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Halaman reset password (tanpa token) - LANGSUNG buat token dan redirect
 Route::get('/reset-password', function () {
-    // Buat token sementara
     $token = Str::random(60);
-    $email = 'vanisaadmin@gmail.com'; // Ganti dengan email yang terdaftar
-    
-    // Simpan token di cache (berlaku 15 menit)
-    Cache::put('reset_' . $token, $email, 900);
-    
-    // Redirect ke halaman reset dengan token
+
+    // Tidak menyimpan email lagi
+    Cache::put('reset_' . $token, true, 900);
+
     return redirect('/reset-password/' . $token);
 });
 
 // Halaman form reset password (dengan token)
 Route::get('/reset-password/{token}', function ($token) {
-    // Cek token di cache
-    $email = Cache::get('reset_' . $token);
-    
-    if (!$email) {
-        return redirect('/login')->withErrors(['Link reset sudah kadaluarsa atau tidak valid']);
+
+    if (!Cache::has('reset_' . $token)) {
+        return redirect('/login')->withErrors([
+            'Link reset sudah kadaluarsa atau tidak valid'
+        ]);
     }
-    
-    return view('reset-password', ['token' => $token, 'email' => $email]);
+
+    return view('reset-password', [
+        'token' => $token
+    ]);
 });
 
 // Proses reset password (submit form)
 Route::post('/reset-password/proses', function (Request $request) {
+
     $request->validate([
-        'email' => 'required|email',
+        'email' => 'required|email|exists:admins,email',
         'password' => 'required|min:6|confirmed',
         'token' => 'required'
     ]);
 
-    // Cek token di cache
-    $email = Cache::get('reset_' . $request->token);
-    
-    if (!$email || $email !== $request->email) {
-        return back()->withErrors(['Token tidak valid atau sudah kadaluarsa']);
+    if (!Cache::has('reset_' . $request->token)) {
+        return back()->withErrors([
+            'Link reset sudah kadaluarsa.'
+        ]);
     }
 
-    // Update password langsung ke tabel admins
-    DB::table('admins')->where('email', $request->email)->update([
-        'password' => Hash::make($request->password)
-    ]);
+    DB::table('admins')
+        ->where('email', $request->email)
+        ->update([
+            'password' => Hash::make($request->password)
+        ]);
 
-    // Hapus token dari cache
     Cache::forget('reset_' . $request->token);
 
-    return redirect('/login')->with('status', 'Password berhasil diubah! Silakan login.');
+    return redirect('/login')
+        ->with('status', 'Password berhasil diubah.');
 });
 
 // ============================================
