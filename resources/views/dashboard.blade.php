@@ -391,7 +391,7 @@
                     <div class="card-icon">
                         <i class="fas fa-file-alt"></i>
                     </div>
-                    <h5 class="card-title">Manajemen Halaman</h5>
+                    <h5 class="card-title">Tentang Kami</h5>
                     <p class="text-muted small">Kelola halaman statis website (Tentang Kami, Kontak, dll)</p>
                     <div class="d-flex justify-content-center gap-2 mb-3">
                         <span class="badge bg-light text-success">{{ $totalPages ?? 0 }} Halaman</span>
